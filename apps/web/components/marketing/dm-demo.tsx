@@ -72,13 +72,18 @@ export function DmDemo() {
   const visibleTraces = TRACES.filter((tr) => t >= tr.at);
 
   return (
-    <section className="relative overflow-hidden border-t border-hairline section">
+    <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden border-t border-hairline py-24">
       <Scene
         src="/media/dm-night"
         poster="/media/dm-hands.webp"
-        className="-z-10 opacity-40 [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]"
-        objectPosition="50% 35%"
-        dim={0.78}
+        className="-z-10"
+        objectPosition="50% 40%"
+        dim={0.45}
+      />
+      {/* Legibility scrim — footage stays full-bleed, text stays readable. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-[5] bg-[linear-gradient(to_right,var(--surface-0)_0%,rgba(11,10,13,0.78)_42%,rgba(11,10,13,0.32)_100%),linear-gradient(to_bottom,rgba(11,10,13,0.55),transparent_28%,rgba(11,10,13,0.8))]"
       />
       <div className="container">
         <div className="max-w-2xl">
