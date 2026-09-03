@@ -17,13 +17,13 @@ export function FormField({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-1.5", className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
       {error ? (
         <p className="text-xs text-terracotta">{error}</p>
       ) : hint ? (
-        <p className="text-xs text-slate/80">{hint}</p>
+        <p className="text-xs text-faint">{hint}</p>
       ) : null}
     </div>
   );

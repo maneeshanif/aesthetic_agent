@@ -145,7 +145,7 @@ export default function KnowledgePage() {
             {docs.data.map((doc) => (
               <li
                 key={doc.id}
-                className="flex items-center justify-between gap-4 rounded-card border border-stroke bg-pearl/70 px-5 py-4"
+                className="flex items-center justify-between gap-4 rounded-card border border-stroke bg-pearl px-5 py-4"
               >
                 <div className="flex min-w-0 items-center gap-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-stroke bg-elevated">

@@ -124,7 +124,7 @@ export default function TeamPage() {
                   id="invite-role"
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value as Role)}
-                  className="flex h-11 w-full rounded-md border border-stroke bg-pearl/70 px-3.5 text-sm text-espresso focus-visible:border-champagne/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/25"
+                  className="h-11 w-full rounded-md border border-stroke bg-elevated px-3.5 text-sm text-espresso focus-visible:border-champagne/60 focus-visible:outline-none"
                 >
                   {ROLES.map((r) => (
                     <option key={r} value={r}>
@@ -155,7 +155,7 @@ export default function TeamPage() {
           {members.data?.map((m) => (
             <li
               key={m.id}
-              className="flex items-center justify-between gap-4 rounded-card border border-stroke bg-pearl/70 px-5 py-4"
+              className="flex items-center justify-between gap-4 rounded-card border border-stroke bg-pearl px-5 py-4"
             >
               <div className="flex min-w-0 items-center gap-3">
                 <Avatar>
@@ -181,7 +181,7 @@ export default function TeamPage() {
                 <select
                   value={m.role}
                   onChange={(e) => changeRole(m.id, e.target.value as Role)}
-                  className="h-9 rounded-md border border-stroke bg-pearl/70 px-2.5 text-xs text-espresso focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/25"
+                  className="h-9 rounded-md border border-stroke bg-elevated px-2.5 text-xs text-espresso focus-visible:border-champagne/60 focus-visible:outline-none"
                 >
                   {ROLES.map((r) => (
                     <option key={r} value={r}>

@@ -1,104 +1,111 @@
 "use client";
 
 import { useRef } from "react";
-import { MessageSquare, ScanLine, CalendarCheck } from "lucide-react";
+import { MessageSquareText, ScanLine, CalendarCheck2 } from "lucide-react";
 import { useGsap } from "@/lib/use-gsap";
 
-const CARDS = [
+const PANELS = [
   {
-    id: "01",
-    icon: MessageSquare,
-    title: "The Router",
-    body: "A DM lands at 10:14 PM. Vespera classifies intent — pricing, medical, or ready-to-book — before a human would have unlocked their phone.",
-    line: "Intent · Booking readiness · Channel",
+    icon: MessageSquareText,
+    title: "It reads the intent",
+    body: "A DM lands at 10:14 PM. Vespera reads it in one pass — pricing question, medical question, or ready-to-book — and picks the path before a human would have unlocked their phone.",
+    trace: ["intent            pricing_inquiry", "booking_readiness 0.31", "channel           instagram_dm"],
   },
   {
-    id: "02",
     icon: ScanLine,
-    title: "Clinical Protocol Engine",
-    body: "It reads your uploaded rulebook, not the open internet. Accutane in the thread → it diverts a chemical peel to a hydrafacial and says why.",
-    line: "RAG over your menu · Contraindication scan",
+    title: "It checks the rulebook",
+    body: "It reasons over the menu and contraindication rules you uploaded — nothing else. “I’m on Accutane” in the thread diverts a chemical peel to a HydraFacial, and it says why in plain language.",
+    trace: ["retrieve  peel_protocol.md  0.91", "flag      isotretinoin  →  BLOCK", "reroute   chemical_peel → hydrafacial"],
   },
   {
-    id: "03",
-    icon: CalendarCheck,
-    title: "Booking Hand-off",
-    body: "Once the lead is medically cleared, it hands out your Boulevard or Zenoti link and files the lead in the CRM with the full reasoning trace.",
-    line: "Direct booking link · Zero latency",
+    icon: CalendarCheck2,
+    title: "It closes the loop",
+    body: "Once the lead is medically cleared, Vespera hands out your Boulevard or Zenoti link and files the lead in the CRM with the full reasoning trace attached.",
+    trace: ["status  medically_cleared", "issue   booking_url → boulevard", "crm.upsert(lead)  ok  142ms"],
   },
 ];
 
 export function TriageCanvas() {
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const scope = useGsap(({ gsap, scope }) => {
-    gsap.from(scope.querySelectorAll("[data-triage-card]"), {
-      opacity: 0,
-      y: 60,
-      duration: 0.9,
-      stagger: 0.12,
-      ease: "power3.out",
-      scrollTrigger: { trigger: scope, start: "top 70%" },
-    });
+  const scope = useGsap(({ gsap, scope: root }) => {
+    const track = trackRef.current;
+    if (!track || !window.matchMedia("(min-width: 1024px)").matches) {
+      // Mobile: gentle per-panel reveal instead of a pin.
+      root.querySelectorAll("[data-panel]").forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 32,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 80%" },
+        });
+      });
+      return;
+    }
 
-    cardRefs.current.forEach((card) => {
-      if (!card) return;
-      const xTo = gsap.quickTo(card, "x", { duration: 0.5, ease: "power3" });
-      const yTo = gsap.quickTo(card, "y", { duration: 0.5, ease: "power3" });
-      const onMove = (e: MouseEvent) => {
-        const r = card.getBoundingClientRect();
-        xTo((e.clientX - (r.left + r.width / 2)) * 0.06);
-        yTo((e.clientY - (r.top + r.height / 2)) * 0.08);
-      };
-      const reset = () => {
-        xTo(0);
-        yTo(0);
-      };
-      card.addEventListener("mousemove", onMove);
-      card.addEventListener("mouseleave", reset);
+    const distance = () => track.scrollWidth - window.innerWidth + 96;
+    gsap.to(track, {
+      x: () => -distance(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: root,
+        start: "top top",
+        end: () => "+=" + distance(),
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+      },
     });
   });
 
   return (
-    <section id="triage" ref={scope} className="border-y border-stroke/60 bg-elevated/30 py-24">
-      <div className="container">
-        <div className="max-w-2xl">
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate">
-            The multi-agent triage canvas
-          </p>
-          <h2 className="mt-4 font-display text-4xl leading-tight text-espresso sm:text-5xl">
-            Three checkpoints between a midnight DM and a booked chair.
-          </h2>
-        </div>
+    <section
+      ref={scope}
+      className="relative border-y border-hairline bg-ink lg:min-h-[100dvh] lg:overflow-hidden"
+    >
+      <div className="container pt-16 lg:pt-20">
+        <h2 className="max-w-2xl text-display-2 text-espresso">
+          Three moves between a midnight message and a booked chair.
+        </h2>
+      </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {CARDS.map((card, i) => (
-            <div
-              key={card.id}
-              data-triage-card
-              ref={(el) => {
-                cardRefs.current[i] = el;
-              }}
-              className="group relative overflow-hidden rounded-card border border-stroke bg-pearl/80 p-7 shadow-glass transition-colors hover:border-champagne/45"
-            >
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-champagne/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
-              />
-              <div className="flex items-center justify-between">
-                <span className="flex h-11 w-11 items-center justify-center rounded-pill border border-champagne/25 bg-champagne/10">
-                  <card.icon className="h-5 w-5 text-champagne" strokeWidth={1.5} />
-                </span>
-                <span className="font-mono text-sm text-slate/70">{card.id}</span>
-              </div>
-              <h3 className="mt-6 font-display text-2xl text-espresso">{card.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate">{card.body}</p>
-              <p className="mt-6 border-t border-stroke/70 pt-4 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-slate/80">
-                {card.line}
+      <div
+        ref={trackRef}
+        className="mt-12 flex flex-col gap-6 px-5 pb-16 lg:mt-16 lg:h-[62vh] lg:flex-row lg:items-stretch lg:gap-8 lg:px-0 lg:pl-[max(1.25rem,calc((100vw-1320px)/2+2rem))]"
+      >
+        {PANELS.map((p, i) => (
+          <article
+            key={p.title}
+            data-panel
+            className="flex shrink-0 flex-col justify-between rounded-card border border-stroke bg-pearl p-8 lg:w-[38rem]"
+          >
+            <div>
+              <span
+                data-panel-in
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-champagne/12"
+              >
+                <p.icon className="h-5 w-5 text-champagne" strokeWidth={1.75} />
+              </span>
+              <p data-panel-in className="mt-6 font-mono text-xs text-faint">
+                0{i + 1} / 03
+              </p>
+              <h3 data-panel-in className="mt-2 text-display-3 text-espresso">
+                {p.title}
+              </h3>
+              <p data-panel-in className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-slate">
+                {p.body}
               </p>
             </div>
-          ))}
-        </div>
+            <pre
+              data-panel-in
+              className="mt-8 overflow-x-auto rounded-md border border-hairline bg-ink px-4 py-3.5 font-mono text-[0.72rem] leading-relaxed text-slate"
+            >
+              {p.trace.join("\n")}
+            </pre>
+          </article>
+        ))}
       </div>
     </section>
   );

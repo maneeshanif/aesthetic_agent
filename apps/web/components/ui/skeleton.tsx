@@ -6,7 +6,7 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
       className={cn(
         "relative overflow-hidden rounded-md bg-elevated",
         "after:absolute after:inset-0 after:-translate-x-full after:animate-shimmer",
-        "after:bg-gradient-to-r after:from-transparent after:via-pearl/70 after:to-transparent",
+        "after:bg-gradient-to-r after:from-transparent after:via-raised after:to-transparent",
         className,
       )}
       {...props}
