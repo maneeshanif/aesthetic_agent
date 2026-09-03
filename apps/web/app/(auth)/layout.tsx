@@ -3,38 +3,27 @@ import { VesperaWordmark } from "@/components/brand/logo";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-      <aside className="relative hidden flex-col justify-between overflow-hidden bg-[#211c19] p-12 text-[#f3efea] lg:flex">
-        <div
+    <div className="grid min-h-[100dvh] lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <aside className="relative hidden flex-col justify-between overflow-hidden border-r border-hairline bg-ink p-12 lg:flex">
+        <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-70"
-          style={{
-            backgroundImage:
-              "radial-gradient(36rem 26rem at 20% 0%, rgba(212,163,115,0.22), transparent 60%), radial-gradient(30rem 24rem at 90% 100%, rgba(232,197,176,0.14), transparent 55%)",
-          }}
+          className="pointer-events-none absolute -left-32 top-0 h-[34rem] w-[34rem] rounded-full bg-champagne/[0.12] blur-[120px] motion-safe:animate-gold-drift"
         />
-        <Link href="/" className="relative text-[#f3efea]">
-          <span className="inline-flex items-center gap-2">
-            <span className="font-display text-xl">Vespera</span>
-          </span>
+        <Link href="/" className="relative">
+          <VesperaWordmark />
         </Link>
-        <div className="relative">
-          <p className="font-display text-3xl leading-snug">
-            &ldquo;It booked a $1,250 Morpheus8 consult at 11:42 PM while the clinic was
-            dark.&rdquo;
+        <blockquote className="relative">
+          <p className="font-display text-[2rem] font-medium leading-snug text-espresso">
+            It booked a $1,240 Morpheus8 consult at 11:42 PM, while the clinic was dark.
           </p>
-          <p className="mt-4 font-mono text-xs uppercase tracking-[0.16em] text-champagne/80">
-            Sterling Aesthetics — Miami, FL
-          </p>
-        </div>
-        <div className="relative font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[#8c8378]">
-          After-hours clinical concierge
-        </div>
+          <footer className="mt-4 text-sm text-champagne">Dr. Marchetti Aesthetics — Miami</footer>
+        </blockquote>
+        <p className="relative text-xs text-faint">After-hours clinical concierge</p>
       </aside>
 
-      <div className="flex items-center justify-center px-6 py-12">
+      <div className="flex items-center justify-center px-6 py-14">
         <div className="w-full max-w-md">
-          <div className="mb-8 lg:hidden">
+          <div className="mb-10 lg:hidden">
             <VesperaWordmark />
           </div>
           {children}

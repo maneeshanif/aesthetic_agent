@@ -3,67 +3,206 @@
 @tailwind utilities;
 
 /*
- * Vespera AI design tokens — "Alabaster & Champagne Silk".
- * Source of truth: design.md. Do not introduce colors outside this scale.
+ * Vespera — dark, kinetic, gradient-charged.
+ * Warm near-black · amber → coral → pink accent arc · Bricolage display.
  */
 @layer base {
   :root {
-    --surface-0: #faf8f5; /* Warm Alabaster / Milk Silk (canvas) */
-    --surface-1: #ffffff; /* Pure Pearl (cards / glass) */
-    --surface-2: #f3efea; /* Tuscan Linen / Soft Bone (elevated) */
-    --border-subtle: #e8e2d9; /* Cashmere border stroke */
-    --accent-primary: #d4a373; /* Burnished Champagne Gold */
-    --accent-secondary: #e8c5b0; /* Silk Rose / Soft Blush */
-    --text-primary: #1a1715; /* Deep Espresso Basalt */
-    --text-muted: #7a7269; /* Warm Slate Grey */
-    --state-success: #5e826d; /* Eucalyptus Sage Green */
-    --state-flagged: #a65b5b; /* Subdued Terracotta Rose */
+    color-scheme: dark;
 
-    --font-display: "Instrument Serif";
-    --font-sans: "Plus Jakarta Sans";
+    --surface-0: #0b0a0d; /* canvas */
+    --surface-1: #151318; /* raised card */
+    --surface-2: #1d1a21; /* elevated / input */
+    --surface-3: #29252f; /* hover */
+    --surface-ink: #080709; /* deepest — full-bleed scenes */
+
+    --border-subtle: rgba(248, 244, 250, 0.1);
+    --border-hair: rgba(248, 244, 250, 0.06);
+
+    --accent-primary: #f5a623; /* amber */
+    --accent-coral: #ff6a5b;
+    --accent-pink: #ff4d8d;
+    --accent-strong: #ffb84d;
+    --accent-dim: rgba(245, 166, 35, 0.14);
+
+    --text-primary: #f6f3f8;
+    --text-strong: #dbd5e0;
+    --text-muted: #9c96a6;
+    --text-faint: #6e6879;
+    --text-on-accent: #2a0e06;
+    --text-on-ink: #f6f3f8;
+
+    --state-success: #59d499;
+    --state-flagged: #ff7a6b;
+
+    --grad: linear-gradient(100deg, #f5a623 0%, #ff6a5b 52%, #ff4d8d 100%);
+    --grad-soft: linear-gradient(100deg, rgba(245, 166, 35, 0.18), rgba(255, 77, 141, 0.18));
+
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+    --font-display: "Bricolage Grotesque";
+    --font-sans: "Hanken Grotesk";
     --font-mono: "JetBrains Mono";
 
-    --radius: 20px;
+    --radius: 14px;
+    --shadow-overlay: 0 28px 70px -24px rgba(0, 0, 0, 0.72), 0 6px 18px -8px rgba(0, 0, 0, 0.55);
   }
 
   * {
     border-color: var(--border-subtle);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--surface-0);
     color: var(--text-primary);
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-    letter-spacing: -0.02em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 {
-    font-family: var(--font-display), ui-serif, Georgia, serif;
-    letter-spacing: 0;
-    font-weight: 400;
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+  }
+
+  ::selection {
+    background: rgba(255, 106, 91, 0.32);
+    color: #fff;
+  }
+  ::placeholder {
+    color: var(--text-faint);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent-coral);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface-3) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--surface-3);
+    border-radius: 999px;
+    border: 3px solid var(--surface-0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
+  .paper,
   .glass-panel {
-    background: color-mix(in srgb, var(--surface-1) 70%, transparent);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: var(--surface-1);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 40px -12px rgba(26, 23, 21, 0.18);
   }
 
-  .pill-button {
-    border-radius: 9999px;
-    border: 1px solid rgba(212, 163, 115, 0.3);
+  /* Gradient-lit panel: subtle animated border + inner glow. */
+  .panel-lit {
+    position: relative;
+    background: var(--surface-1);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+  .panel-lit::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--grad);
+    opacity: 0.5;
+  }
+
+  .section {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-top: 11rem;
+      padding-bottom: 11rem;
+    }
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .text-grad {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-grad {
+    background-image: var(--grad);
+  }
+  .glow-grad {
+    box-shadow: 0 22px 60px -20px rgba(255, 106, 91, 0.45), 0 0 0 1px rgba(245, 166, 35, 0.25);
+  }
+  .mesh {
+    background-color: var(--surface-ink);
+    background-image:
+      radial-gradient(38rem 30rem at 12% 18%, rgba(245, 166, 35, 0.2), transparent 55%),
+      radial-gradient(34rem 30rem at 88% 10%, rgba(255, 77, 141, 0.22), transparent 55%),
+      radial-gradient(42rem 34rem at 68% 92%, rgba(255, 106, 91, 0.12), transparent 60%);
+  }
+  .wash-amber {
+    background-image: radial-gradient(46rem 32rem at 14% -6%, rgba(245, 166, 35, 0.14), transparent 60%);
+  }
+  .img-treat {
+    filter: grayscale(0.7) contrast(1.05) brightness(0.6);
+  }
+}
+
+@keyframes dm-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes wave-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
   }
 }

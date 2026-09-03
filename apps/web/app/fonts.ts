@@ -1,20 +1,22 @@
-import { Instrument_Serif, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 
-export const displaySerif = Instrument_Serif({
-  weight: ["400"],
-  style: ["normal", "italic"],
+/** Display — big kinetic headlines with real character. */
+export const displaySans = Bricolage_Grotesque({
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-display",
 });
 
-export const sans = Plus_Jakarta_Sans({
-  weight: ["400", "500", "600", "700"],
+/** UI + body. */
+export const sans = Hanken_Grotesk({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
 });
 
+/** Data, numerals, latency figures. Not decoration. */
 export const mono = JetBrains_Mono({
   weight: ["400", "500"],
   subsets: ["latin"],

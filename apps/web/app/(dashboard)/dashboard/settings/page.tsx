@@ -123,7 +123,7 @@ export default function SettingsPage() {
               <FormField label="Time zone" htmlFor="timezone" error={errors.timezone?.message}>
                 <select
                   id="timezone"
-                  className="flex h-11 w-full rounded-md border border-stroke bg-pearl/70 px-3.5 text-sm text-espresso focus-visible:border-champagne/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/25"
+                  className="h-11 w-full rounded-md border border-stroke bg-elevated px-3.5 text-sm text-espresso focus-visible:border-champagne/60 focus-visible:outline-none"
                   {...register("timezone")}
                 >
                   {TIMEZONES.map((tz) => (

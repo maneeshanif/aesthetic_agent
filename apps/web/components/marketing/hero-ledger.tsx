@@ -1,182 +1,167 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Check, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
+import { Waveform } from "@/components/marketing/waveform";
 import { useGsap } from "@/lib/use-gsap";
 import { cn } from "@/lib/utils";
 
-interface LedgerRow {
-  name: string;
-  city: string;
-  treatment: string;
-  value: number;
-  time: string;
-}
-
-const SEED: LedgerRow[] = [
-  { name: "Sarah T.", city: "Dallas, TX", treatment: "Morpheus8 Full Face", value: 1250, time: "11:42 PM" },
-  { name: "Elena R.", city: "Miami, FL", treatment: "Profhilo + Filler", value: 950, time: "11:08 PM" },
-  { name: "Priya N.", city: "London, UK", treatment: "Erbium Resurfacing", value: 1400, time: "10:51 PM" },
-  { name: "Jade W.", city: "Beverly Hills", treatment: "Lip Filler Refresh", value: 780, time: "10:29 PM" },
-  { name: "Amira K.", city: "Dubai, AE", treatment: "Full-Face PRP", value: 1120, time: "10:03 PM" },
+const CAPTIONS = [
+  { at: 700, text: "Hi Delphine — you checked our Morpheus8 pricing last night." },
+  { at: 3400, text: "We've had a cancellation tomorrow at 2:00 PM." },
+  { at: 6200, text: "Shall I hold that slot under your name?" },
 ];
-
-const POOL: LedgerRow[] = [
-  { name: "Nadia F.", city: "Austin, TX", treatment: "Sculptra (2 vials)", value: 1600, time: "12:14 AM" },
-  { name: "Grace L.", city: "Chicago, IL", treatment: "Microneedling + Exosomes", value: 690, time: "12:31 AM" },
-  { name: "Bianca M.", city: "Scottsdale, AZ", treatment: "Morpheus8 Neck", value: 900, time: "12:48 AM" },
-  { name: "Iris H.", city: "Seattle, WA", treatment: "Botox (40u) + Tox Lift", value: 620, time: "1:05 AM" },
-];
-
-function formatUsd(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
-}
+const LOOP = 10500;
 
 export function HeroLedger() {
   const scope = useGsap(({ gsap }) => {
-    gsap.set("[data-hero-line]", { yPercent: 110 });
+    gsap.set("[data-line]", { yPercent: 118, skewY: 4, filter: "blur(10px)" });
     gsap
       .timeline({ defaults: { ease: "power4.out" } })
-      .to("[data-hero-badge]", { opacity: 1, y: 0, duration: 0.7 })
-      .to("[data-hero-line]", { yPercent: 0, duration: 1.1, stagger: 0.09 }, "-=0.35")
-      .to("[data-hero-sub]", { opacity: 1, y: 0, duration: 0.8 }, "-=0.7")
-      .to("[data-hero-cta]", { opacity: 1, y: 0, duration: 0.7 }, "-=0.6")
-      .fromTo(
-        "[data-ledger-panel]",
-        { opacity: 0, y: 40, rotateX: 8 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 1.2 },
-        "-=1",
-      );
-
-    gsap.to("[data-caustic]", {
-      backgroundPosition: "120% 60%",
-      duration: 18,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
+      .to("[data-line]", { yPercent: 0, skewY: 0, filter: "blur(0px)", duration: 1.15, stagger: 0.11 }, 0.15)
+      .to("[data-sub]", { opacity: 1, y: 0, duration: 0.8 }, "-=0.75")
+      .to("[data-cta]", { opacity: 1, y: 0, duration: 0.7 }, "-=0.6")
+      .fromTo("[data-console]", { opacity: 0, y: 44, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.95");
   });
 
-  const [rows, setRows] = useState<LedgerRow[]>(SEED);
+  const consoleRef = useRef<HTMLDivElement>(null);
+  const [t, setT] = useState(0);
+  const [running, setRunning] = useState(false);
 
   useEffect(() => {
-    let i = 0;
-    const id = window.setInterval(() => {
-      setRows((prev) => {
-        const next = POOL[i % POOL.length];
-        i += 1;
-        return [next, ...prev].slice(0, 6);
-      });
-    }, 3600);
-    return () => window.clearInterval(id);
+    const el = consoleRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setT(LOOP);
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setRunning(e.isIntersecting), { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
-  return (
-    <section ref={scope} className="relative overflow-hidden">
-      <div
-        data-caustic
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-70"
-        style={{
-          backgroundImage:
-            "radial-gradient(60rem 40rem at 12% -10%, rgba(232,197,176,0.35), transparent 60%), radial-gradient(48rem 40rem at 105% 20%, rgba(212,163,115,0.22), transparent 55%)",
-          backgroundSize: "160% 160%",
-        }}
-      />
-      <div className="container grid grid-cols-1 gap-y-14 pb-24 pt-16 lg:grid-cols-12 lg:gap-x-8 lg:pb-32 lg:pt-24">
-        <div className="lg:col-span-7 lg:pt-10">
-          <span
-            data-hero-badge
-            className="pill-button inline-flex translate-y-2 items-center gap-2 bg-pearl/60 px-4 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate opacity-0 backdrop-blur"
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-pulse-ring rounded-full bg-champagne" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-champagne" />
-            </span>
-            After-hours clinical concierge
-          </span>
+  useEffect(() => {
+    if (!running) return;
+    let raf = 0;
+    const start = performance.now();
+    const loop = (now: number) => {
+      setT((now - start) % LOOP);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [running]);
 
-          <h1 className="mt-7 font-display text-[2.9rem] leading-[1.05] text-espresso sm:text-6xl lg:text-[4.4rem]">
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block">
-                Capturing the
+  const connected = t >= 400;
+  const ended = t >= 8200;
+  const live = connected && !ended;
+  const secs = Math.max(0, Math.floor((Math.min(t, 8200) - 400) / 1000));
+  const caption = [...CAPTIONS].reverse().find((c) => t >= c.at)?.text ?? CAPTIONS[0].text;
+
+  return (
+    <section ref={scope} className="relative w-full overflow-hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-canvas/0 via-canvas/0 to-canvas"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-52 top-0 h-[44rem] w-[44rem] rounded-full bg-champagne/[0.13] blur-[140px] motion-safe:animate-gold-drift"
+      />
+
+      <div className="container grid grid-cols-1 items-center gap-y-16 pb-28 pt-40 lg:grid-cols-12 lg:gap-x-10 lg:pb-40 lg:pt-48">
+        <div className="lg:col-span-6">
+          <h1
+            className="font-semibold text-espresso"
+            style={{ fontSize: "clamp(2.7rem, 5.7vw, 5.05rem)", lineHeight: 1, letterSpacing: "-0.04em" }}
+          >
+            <span className="block overflow-hidden pb-1">
+              <span data-line className="block">
+                The voice on the line
               </span>
             </span>
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block italic text-[#a9763f]">
-                $1,500 consultations
+            <span className="block overflow-hidden pb-1">
+              <span data-line className="block">
+                when your front desk
               </span>
             </span>
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block">
-                your front desk sleeps through.
+            <span className="block overflow-hidden pb-1">
+              <span data-line className="block text-grad">
+                has gone home.
               </span>
             </span>
           </h1>
 
-          <p
-            data-hero-sub
-            className="mt-7 max-w-md translate-y-3 text-[1.05rem] leading-relaxed text-slate opacity-0"
-          >
-            Vespera answers every DM in seconds, checks the clinical rulebook before it ever
-            says <span className="text-espresso">yes</span>, and drops a booking link while the
-            lead is still warm.
+          <p data-sub className="mt-9 max-w-lg translate-y-3 text-lg leading-relaxed text-slate opacity-0">
+            Vespera answers the 11&nbsp;PM DM in seconds, picks up the clinic line after hours, and
+            calls stalled leads back the same evening — checking your clinical rulebook before it ever
+            says <span className="text-espresso">yes</span>.
           </p>
 
-          <div data-hero-cta className="mt-9 flex translate-y-3 flex-wrap items-center gap-3 opacity-0">
-            <Button asChild size="lg" variant="champagne">
-              <Link href="/register">
-                Request access
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </Button>
+          <div data-cta className="mt-10 flex translate-y-3 flex-wrap items-center gap-3 opacity-0">
+            <Magnetic strength={0.4}>
+              <Button asChild size="lg" variant="primary">
+                <Link href="/register">
+                  Request access
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+                </Link>
+              </Button>
+            </Magnetic>
             <Button asChild size="lg" variant="outline">
-              <a href="#triage">See a live triage</a>
+              <a href="#voice">Hear a live call</a>
             </Button>
           </div>
         </div>
 
-        <div className="lg:col-span-5" style={{ perspective: "1400px" }}>
-          <div
-            data-ledger-panel
-            className="glass-panel overflow-hidden p-1.5"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <div className="flex items-center justify-between px-4 py-3">
-              <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-slate">
-                Live aesthetic ledger
-              </p>
-              <span className="flex items-center gap-1.5 font-mono text-[0.7rem] text-sage">
-                <span className="h-1.5 w-1.5 rounded-full bg-sage" />
-                closing now
+        {/* Live voice console */}
+        <div className="lg:col-span-6">
+          <div ref={consoleRef} data-console className="panel-lit p-5 opacity-0 sm:p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-grad text-[var(--text-on-accent)]">
+                  <PhoneCall className="h-4 w-4" strokeWidth={2} />
+                </span>
+                <div className="leading-tight">
+                  <p className="text-sm font-medium text-espresso">Vespera → Delphine Aumont</p>
+                  <p className="text-xs text-faint">Outbound recovery · abandoned 2h ago</p>
+                </div>
+              </div>
+              <span className={cn("flex items-center gap-1.5 font-mono text-xs", live ? "text-sage" : ended ? "text-faint" : "text-coral")}>
+                <span className={cn("h-1.5 w-1.5 rounded-full", live ? "bg-sage motion-safe:animate-pulse" : ended ? "bg-faint" : "bg-coral motion-safe:animate-pulse")} />
+                {ended ? "Call ended" : live ? `Connected 0:${String(secs).padStart(2, "0")}` : "Dialing…"}
               </span>
             </div>
-            <ul className="space-y-1.5">
-              {rows.map((row, idx) => (
-                <li
-                  key={`${row.name}-${row.time}-${idx}`}
-                  className={cn(
-                    "rounded-[14px] border border-stroke/70 bg-pearl/80 px-4 py-3 transition-all",
-                    idx === 0 && "animate-fade-up border-champagne/40 bg-champagne/[0.06]",
-                  )}
-                >
-                  <div className="flex items-baseline justify-between gap-3">
-                    <p className="text-sm font-medium text-espresso">{row.name}</p>
-                    <p className="font-mono text-xs text-slate">{row.time}</p>
-                  </div>
-                  <div className="mt-1 flex items-baseline justify-between gap-3">
-                    <p className="truncate text-xs text-slate">
-                      {row.city} · {row.treatment}
-                    </p>
-                    <p className="font-mono text-xs font-medium text-[#a9763f]">
-                      {formatUsd(row.value)}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+
+            <div className="mt-5">
+              <Waveform live={live} height={92} bars={56} />
+            </div>
+
+            <div className="mt-4 min-h-[3rem] rounded-lg border border-hairline bg-ink px-4 py-3 text-[0.85rem] leading-snug text-strong">
+              <span key={caption} className="motion-safe:[animation:dm-in_.4s_var(--ease-out)_both]">
+                {caption}
+              </span>
+            </div>
+
+            <div
+              className={cn(
+                "mt-3 flex items-center gap-3 transition-[transform,opacity,filter] duration-500",
+                ended ? "translate-y-0 opacity-100 blur-0" : "pointer-events-none translate-y-2 opacity-0 blur-[3px]",
+              )}
+              style={{ transitionTimingFunction: "var(--ease-drawer)" }}
+            >
+              <div className="glow-grad flex flex-1 items-center gap-3 rounded-lg bg-elevated px-3.5 py-2.5">
+                <span className="flex h-6 w-6 items-center justify-center rounded-md bg-grad text-[var(--text-on-accent)]">
+                  <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+                </span>
+                <span className="leading-tight">
+                  <span className="block text-[0.82rem] font-medium text-espresso">Booked · Morpheus8 full face</span>
+                  <span className="block text-[0.68rem] text-faint">Tomorrow 2:00 PM · confirmation SMS sent</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

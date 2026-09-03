@@ -125,7 +125,7 @@ export default function RegisterPage() {
               className={cn(
                 "flex h-6 w-6 items-center justify-center rounded-pill border text-[0.7rem] font-medium transition-colors",
                 i < step && "border-sage/40 bg-sage/15 text-sage",
-                i === step && "border-champagne/50 bg-champagne/15 text-[#a9763f]",
+                i === step && "border-champagne/50 bg-champagne/10 text-champagne",
                 i > step && "border-stroke text-slate",
               )}
             >
@@ -139,7 +139,7 @@ export default function RegisterPage() {
 
       {step === 0 && (
         <>
-          <h1 className="font-display text-3xl text-espresso">Create your account</h1>
+          <h1 className="text-display-2 text-espresso">Create your account</h1>
           <p className="mt-2 text-sm text-slate">Two minutes to your first triage.</p>
           <form onSubmit={accountForm.handleSubmit(onAccount)} className="mt-8 space-y-5">
             <FormField label="Work email" htmlFor="email" error={accountForm.formState.errors.email?.message}>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               size="lg"
-              variant="champagne"
+              variant="primary"
               className="w-full"
               disabled={submitting}
             >
@@ -184,7 +184,7 @@ export default function RegisterPage() {
 
       {step === 1 && (
         <>
-          <h1 className="font-display text-3xl text-espresso">Name your studio</h1>
+          <h1 className="text-display-2 text-espresso">Name your studio</h1>
           <p className="mt-2 text-sm text-slate">This becomes your tenant workspace.</p>
           <form onSubmit={spaForm.handleSubmit(onSpa)} className="mt-8 space-y-5">
             <FormField label="Studio name" htmlFor="name" error={spaForm.formState.errors.name?.message}>
@@ -205,7 +205,7 @@ export default function RegisterPage() {
             >
               <select
                 id="timezone"
-                className="flex h-11 w-full rounded-md border border-stroke bg-pearl/70 px-3.5 text-sm text-espresso focus-visible:border-champagne/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/25"
+                className="h-11 w-full rounded-md border border-stroke bg-elevated px-3.5 text-sm text-espresso focus-visible:border-champagne/60 focus-visible:outline-none"
                 {...spaForm.register("timezone")}
               >
                 {TIMEZONES.map((tz) => (
@@ -222,7 +222,7 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 size="lg"
-                variant="champagne"
+                variant="primary"
                 className="flex-1"
                 disabled={submitting}
               >
@@ -238,7 +238,7 @@ export default function RegisterPage() {
           <span className="flex h-14 w-14 items-center justify-center rounded-pill border border-sage/40 bg-sage/15">
             <Check className="h-6 w-6 text-sage" />
           </span>
-          <h1 className="mt-6 font-display text-3xl text-espresso">You're in.</h1>
+          <h1 className="mt-6 text-display-2 text-espresso">You're in.</h1>
           <p className="mt-2 text-sm text-slate">Taking you to your dashboard…</p>
         </div>
       )}

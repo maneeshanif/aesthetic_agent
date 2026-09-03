@@ -53,7 +53,7 @@ function LoginForm() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl text-espresso">Welcome back</h1>
+      <h1 className="text-display-2 text-espresso">Welcome back</h1>
       <p className="mt-2 text-sm text-slate">Sign in to your Vespera workspace.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
@@ -68,7 +68,7 @@ function LoginForm() {
             {...register("password")}
           />
         </FormField>
-        <Button type="submit" size="lg" variant="champagne" className="w-full" disabled={submitting}>
+        <Button type="submit" size="lg" variant="primary" className="w-full" disabled={submitting}>
           {submitting ? "Signing in…" : "Sign in"}
         </Button>
       </form>

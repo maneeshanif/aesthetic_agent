@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CalendarClock, ShieldAlert } from "lucide-react";
+import { ErrorPanel } from "@/components/dashboard/states";
 import { PatientStatusBadge } from "@/components/domain/status-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +16,6 @@ import { FormField } from "@/components/ui/form-field";
 import { Input, Textarea } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toaster";
-import { ErrorPanel } from "@/components/dashboard/states";
 import { ApiClientError } from "@/lib/api-client";
 import { CHANNEL_LABEL, clockTime, currency, relativeTime } from "@/lib/format";
 import type { PatientDetail, PatientStatus } from "@/lib/types";
@@ -29,6 +29,9 @@ const STATUS_OPTIONS: PatientStatus[] = [
   "booked",
   "abandoned",
 ];
+
+const selectClass =
+  "h-11 w-full rounded-md border border-stroke bg-elevated px-3.5 text-sm text-espresso focus-visible:border-champagne/60 focus-visible:outline-none";
 
 export function PatientDetailDialog({
   patientId,
@@ -99,7 +102,7 @@ export function PatientDetailDialog({
         ) : detail ? (
           <>
             <DialogHeader>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <DialogTitle>{detail.full_name ?? "Anonymous lead"}</DialogTitle>
                 <PatientStatusBadge status={detail.status} />
               </div>
@@ -108,18 +111,18 @@ export function PatientDetailDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <div className="grid grid-cols-2 gap-3 rounded-lg border border-stroke bg-elevated/40 p-4 text-sm">
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-y border-hairline py-4 text-sm">
               <Field label="Phone" value={detail.phone} />
               <Field label="Email" value={detail.email} />
               <Field label="Instagram" value={detail.instagram_handle} />
               <Field label="Requested" value={detail.requested_treatment} />
               <Field label="Est. value" value={currency(detail.estimated_value)} />
-            </div>
+            </dl>
 
             {detail.medical_flags.length > 0 && (
-              <div className="rounded-lg border border-terracotta/25 bg-terracotta/[0.05] p-4">
-                <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.12em] text-terracotta">
-                  <ShieldAlert className="h-3.5 w-3.5" />
+              <div className="rounded-md border border-terracotta/25 bg-terracotta/[0.06] p-3.5">
+                <p className="flex items-center gap-2 text-xs font-medium text-terracotta">
+                  <ShieldAlert className="h-3.5 w-3.5" strokeWidth={1.75} />
                   Contraindication flags
                 </p>
                 <ul className="mt-2 space-y-1 text-sm text-espresso">
@@ -133,20 +136,20 @@ export function PatientDetailDialog({
             )}
 
             <div>
-              <p className="mb-2 text-xs font-medium uppercase tracking-[0.12em] text-slate">
+              <p className="mb-2 text-xs font-medium text-ink-strong">
                 Conversations ({detail.sessions.length})
               </p>
               {detail.sessions.length === 0 ? (
                 <p className="text-sm text-slate">No sessions linked yet.</p>
               ) : (
-                <ul className="space-y-1.5">
+                <ul className="divide-y divide-hairline border-y border-hairline">
                   {detail.sessions.map((s) => (
                     <li
                       key={s.id}
-                      className="flex items-center justify-between rounded-md border border-stroke bg-pearl/60 px-3 py-2 text-sm"
+                      className="flex items-center justify-between py-2.5 text-sm text-slate"
                     >
-                      <span className="flex items-center gap-2 text-slate">
-                        <CalendarClock className="h-3.5 w-3.5" />
+                      <span className="flex items-center gap-2">
+                        <CalendarClock className="h-3.5 w-3.5" strokeWidth={1.5} />
                         {s.status} · {clockTime(s.last_message_at ?? s.created_at)}
                       </span>
                       {s.booking_url_issued ? (
@@ -159,14 +162,14 @@ export function PatientDetailDialog({
             </div>
 
             {canEdit ? (
-              <div className="space-y-4 border-t border-stroke pt-4">
+              <div className="space-y-4 border-t border-hairline pt-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <FormField label="Status" htmlFor="status">
                     <select
                       id="status"
                       value={status}
                       onChange={(e) => setStatus(e.target.value as PatientStatus)}
-                      className="flex h-11 w-full rounded-md border border-stroke bg-pearl/70 px-3.5 text-sm text-espresso focus-visible:border-champagne/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/25"
+                      className={selectClass}
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>
@@ -198,7 +201,7 @@ export function PatientDetailDialog({
                 </div>
               </div>
             ) : (
-              <p className="border-t border-stroke pt-4 text-xs text-slate">
+              <p className="border-t border-hairline pt-4 text-xs text-slate">
                 Read-only — ask a manager or owner to update this lead.
               </p>
             )}
@@ -212,8 +215,8 @@ export function PatientDetailDialog({
 function Field({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div>
-      <p className="text-[0.68rem] uppercase tracking-[0.12em] text-slate">{label}</p>
-      <p className="mt-0.5 text-espresso">{value || "—"}</p>
+      <dt className="text-[0.72rem] text-faint">{label}</dt>
+      <dd className="mt-0.5 text-espresso">{value || "—"}</dd>
     </div>
   );
 }

@@ -10,14 +10,15 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { CHANNEL_LABEL, currency, relativeTime } from "@/lib/format";
 import { canEditPatients } from "@/lib/permissions";
+import { CHANNEL_LABEL, currency, relativeTime } from "@/lib/format";
 import type { PatientStatus } from "@/lib/types";
 import { useApi, useResource } from "@/lib/use-api";
 import { useAppStore } from "@/store/app-store";
+import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 12;
-const FILTERS: { value: string; label: string }[] = [
+const FILTERS = [
   { value: "", label: "All" },
   { value: "qualifying", label: "Qualifying" },
   { value: "medically_cleared", label: "Cleared" },
@@ -66,12 +67,15 @@ export default function PatientsPage() {
     <div>
       <PageHeader
         title="Patients"
-        description="Every lead who has spoken with Vespera, with the treatment they asked for and where triage left them."
+        description="Every lead who has spoken with Vespera — the treatment they asked for and where triage left them."
       />
 
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate"
+            strokeWidth={1.5}
+          />
           <Input
             placeholder="Search name, treatment, phone…"
             value={rawQuery}
@@ -79,7 +83,7 @@ export default function PatientsPage() {
             className="pl-9"
           />
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {FILTERS.map((f) => (
             <button
               key={f.value}
@@ -87,11 +91,12 @@ export default function PatientsPage() {
                 setStatus(f.value);
                 setPage(0);
               }}
-              className={
+              className={cn(
+                "rounded-full border px-3 py-1 text-xs transition-colors",
                 status === f.value
-                  ? "rounded-pill border border-champagne/40 bg-champagne/10 px-3 py-1 text-xs text-[#a9763f]"
-                  : "rounded-pill border border-stroke bg-pearl/60 px-3 py-1 text-xs text-slate hover:text-espresso"
-              }
+                  ? "border-champagne bg-champagne/10 text-champagne"
+                  : "border-stroke text-slate hover:text-espresso",
+              )}
             >
               {f.label}
             </button>
@@ -105,7 +110,7 @@ export default function PatientsPage() {
         <ErrorPanel error={list.error} onRetry={list.refetch} />
       ) : list.data && list.data.items.length > 0 ? (
         <>
-          <div className="rounded-card border border-stroke bg-pearl/70">
+          <div className="border-y border-stroke">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -119,11 +124,7 @@ export default function PatientsPage() {
               </TableHeader>
               <TableBody>
                 {list.data.items.map((p) => (
-                  <TableRow
-                    key={p.id}
-                    onClick={() => setSelected(p.id)}
-                    className="cursor-pointer"
-                  >
+                  <TableRow key={p.id} onClick={() => setSelected(p.id)} className="cursor-pointer">
                     <TableCell className="font-medium">
                       {p.full_name ?? <span className="text-slate">Anonymous lead</span>}
                     </TableCell>
@@ -132,10 +133,10 @@ export default function PatientsPage() {
                     <TableCell>
                       <PatientStatusBadge status={p.status as PatientStatus} />
                     </TableCell>
-                    <TableCell className="text-right font-mono text-sm text-slate">
+                    <TableCell className="text-right font-mono text-xs text-slate">
                       {currency(p.estimated_value)}
                     </TableCell>
-                    <TableCell className="text-right text-slate">
+                    <TableCell className="text-right font-mono text-xs text-slate">
                       {relativeTime(p.created_at)}
                     </TableCell>
                   </TableRow>
@@ -144,7 +145,7 @@ export default function PatientsPage() {
             </Table>
           </div>
 
-          <div className="mt-4 flex items-center justify-between text-sm text-slate">
+          <div className="mt-4 flex items-center justify-between font-mono text-xs text-slate">
             <span>
               {list.data.total} lead{list.data.total === 1 ? "" : "s"}
             </span>
@@ -155,10 +156,10 @@ export default function PatientsPage() {
                 disabled={page === 0}
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
               >
-                <ChevronLeft className="h-3.5 w-3.5" />
+                <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
                 Prev
               </Button>
-              <span className="font-mono text-xs">
+              <span>
                 {page + 1} / {totalPages}
               </span>
               <Button
@@ -168,7 +169,7 @@ export default function PatientsPage() {
                 onClick={() => setPage((p) => p + 1)}
               >
                 Next
-                <ChevronRight className="h-3.5 w-3.5" />
+                <ChevronRight className="h-3.5 w-3.5" strokeWidth={1.5} />
               </Button>
             </div>
           </div>

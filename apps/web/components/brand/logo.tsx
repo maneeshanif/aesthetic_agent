@@ -1,30 +1,30 @@
 import { cn } from "@/lib/utils";
 
-/** The Vespera monogram — an hourglass meeting an aesthetic droplet. */
+/** Vespera mark — the evening star over the horizon line. */
 export function VesperaMark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 28 28"
       fill="none"
-      stroke="currentColor"
-      strokeWidth={1.25}
       className={cn("h-6 w-6 text-champagne", className)}
       aria-hidden="true"
     >
       <path
-        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
-        strokeDasharray="1 3"
+        d="M14 3.5l1.9 5.3a5 5 0 003.3 3.3l5.3 1.9-5.3 1.9a5 5 0 00-3.3 3.3L14 24.5l-1.9-5.3a5 5 0 00-3.3-3.3L3.5 14l5.3-1.9a5 5 0 003.3-3.3L14 3.5z"
+        fill="currentColor"
+        fillOpacity="0.9"
       />
-      <path d="M12 6v12M8 10l4-4 4 4M8 14l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 export function VesperaWordmark({ className }: { className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-2", className)}>
+    <span className={cn("inline-flex items-center gap-2.5", className)}>
       <VesperaMark />
-      <span className="font-display text-xl tracking-tight text-espresso">Vespera</span>
+      <span className="font-display text-[1.35rem] font-semibold leading-none tracking-editorial text-espresso">
+        Vespera
+      </span>
     </span>
   );
 }

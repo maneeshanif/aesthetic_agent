@@ -4,21 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill text-sm font-medium tracking-tightish transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne/60 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium tracking-tightish transition-[background-color,color,border-color,transform,box-shadow] duration-150 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40 active:scale-[0.985]",
   {
     variants: {
       variant: {
         primary:
-          "bg-espresso text-canvas shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_8px_24px_-12px_rgba(26,23,21,0.5)] hover:bg-espresso/90",
+          "bg-champagne text-[var(--text-on-accent)] hover:bg-champagne-strong hover:shadow-[0_0_0_1px_rgba(233,178,76,0.4),0_14px_38px_-14px_rgba(233,178,76,0.5)]",
         champagne:
-          "border border-champagne/40 bg-champagne text-espresso shadow-champagne-glow hover:brightness-[1.04]",
+          "bg-champagne text-[var(--text-on-accent)] hover:bg-champagne-strong hover:shadow-[0_0_0_1px_rgba(233,178,76,0.4),0_14px_38px_-14px_rgba(233,178,76,0.5)]",
         outline:
-          "border border-stroke bg-pearl/60 text-espresso backdrop-blur hover:bg-pearl hover:border-champagne/40",
-        ghost: "text-espresso hover:bg-elevated",
-        subtle: "bg-elevated text-slate hover:text-espresso hover:bg-stroke/60",
+          "border border-stroke bg-transparent text-espresso hover:border-champagne/50 hover:bg-elevated",
+        ghost: "text-slate hover:bg-elevated hover:text-espresso",
+        subtle: "bg-elevated text-espresso hover:bg-raised",
         destructive:
-          "border border-terracotta/30 bg-terracotta/10 text-terracotta hover:bg-terracotta/15",
-        link: "text-champagne underline-offset-4 hover:underline rounded-none px-0",
+          "border border-terracotta/40 bg-terracotta/10 text-terracotta hover:bg-terracotta/[0.16]",
+        link: "rounded-none px-0 text-champagne underline-offset-4 hover:underline",
       },
       size: {
         sm: "h-8 px-3.5 text-xs",

@@ -5,14 +5,15 @@ import { Toaster as Sonner } from "sonner";
 export function Toaster() {
   return (
     <Sonner
-      position="top-right"
+      position="bottom-right"
+      theme="dark"
       toastOptions={{
         classNames: {
           toast:
-            "!rounded-card !border !border-stroke !bg-pearl/95 !text-espresso !shadow-glass !backdrop-blur-glass !font-sans",
+            "!rounded-lg !border !border-stroke !bg-pearl !text-espresso !shadow-overlay !font-sans",
           title: "!text-sm !font-medium",
           description: "!text-slate !text-xs",
-          actionButton: "!bg-espresso !text-canvas !rounded-pill",
+          actionButton: "!bg-champagne !text-[#1a1206] !rounded-md",
           success: "!text-sage",
           error: "!text-terracotta",
         },

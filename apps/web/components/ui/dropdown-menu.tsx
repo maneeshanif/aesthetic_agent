@@ -18,8 +18,7 @@ export const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 min-w-[11rem] overflow-hidden rounded-lg border border-stroke bg-pearl p-1.5 shadow-glass",
-        "[box-shadow:inset_0_1px_0_rgba(255,255,255,0.8),0_16px_48px_-20px_rgba(26,23,21,0.35)]",
+        "z-50 min-w-[11rem] overflow-hidden rounded-lg border border-stroke bg-pearl p-1 shadow-overlay",
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
         className,
@@ -53,7 +52,7 @@ export function DropdownMenuLabel({
 }: React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>) {
   return (
     <DropdownMenuPrimitive.Label
-      className={cn("px-2.5 py-1.5 text-[0.7rem] uppercase tracking-[0.14em] text-slate", className)}
+      className={cn("px-2.5 py-1.5 text-xs text-faint", className)}
       {...props}
     />
   );
@@ -65,7 +64,7 @@ export function DropdownMenuSeparator({
 }: React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>) {
   return (
     <DropdownMenuPrimitive.Separator
-      className={cn("-mx-1.5 my-1 h-px bg-stroke", className)}
+      className={cn("-mx-1 my-1 h-px bg-hairline", className)}
       {...props}
     />
   );
@@ -88,7 +87,7 @@ export function DropdownMenuCheckboxItem({
     >
       <span className="absolute left-2.5 flex h-3.5 w-3.5 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <Check className="h-3.5 w-3.5 text-champagne" />
+          <Check className="h-3.5 w-3.5 text-champagne" strokeWidth={2} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}

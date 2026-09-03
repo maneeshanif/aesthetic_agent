@@ -1,37 +1,49 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
+
+const CITIES = ["Beverly Hills", "Miami", "London", "Dubai", "Paris", "New York", "Singapore", "Toronto"];
 
 export function ClosingCta() {
   return (
-    <section className="py-24">
+    <section className="wash-amber section">
       <div className="container">
-        <div className="relative overflow-hidden rounded-card border border-champagne/30 bg-pearl px-8 py-16 text-center shadow-champagne-glow sm:px-16">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-70"
-            style={{
-              backgroundImage:
-                "radial-gradient(30rem 20rem at 50% -20%, rgba(232,197,176,0.4), transparent 60%)",
-            }}
-          />
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate">
-            Beverly Hills · Miami · London · Dubai
-          </p>
-          <h2 className="mx-auto mt-5 max-w-2xl font-display text-4xl leading-tight text-espresso sm:text-5xl">
-            Your best month starts the night you stop missing 11 PM.
+        <div className="border-y border-hairline py-16">
+          <h2 className="max-w-3xl text-display-1 font-semibold text-espresso">
+            Stop losing the bookings that go to{" "}
+            <span className="text-grad">voicemail.</span>
           </h2>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg" variant="champagne">
-              <Link href="/register">
-                Request access
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </Button>
+          <p className="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-slate">
+            A 15-minute walkthrough of the live after-hours qualifier — your menu, your safety
+            rules, your booking link, running against a real inbound conversation.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Magnetic strength={0.4}>
+              <Button asChild size="lg" variant="primary">
+                <Link href="/register">
+                  Book the walkthrough
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+                </Link>
+              </Button>
+            </Magnetic>
             <Button asChild size="lg" variant="outline">
-              <Link href="/login">Sign in</Link>
+              <a href="/vespera-after-hours-briefing.pptx" download>
+                Download the briefing
+              </a>
             </Button>
           </div>
+        </div>
+      </div>
+
+      <div className="mt-10 overflow-hidden border-y border-hairline py-4">
+        <div className="flex w-max animate-marquee gap-10">
+          {[...CITIES, ...CITIES].map((city, i) => (
+            <span key={`${city}-${i}`} className="flex items-center gap-10 text-sm text-faint">
+              {city}
+              <span className="inline-block h-1 w-1 rounded-full bg-champagne/50" />
+            </span>
+          ))}
         </div>
       </div>
     </section>

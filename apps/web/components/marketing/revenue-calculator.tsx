@@ -3,18 +3,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useGsap } from "@/lib/use-gsap";
 
-function useOdometer(target: number) {
-  const [value, setValue] = useState(target);
+const INQUIRY_RATE = 0.058;
+const AFTER_HOURS_SHARE = 0.42;
+const RESPONSE_LIFT = 0.37;
+
+function useCountUp(target: number, run: boolean) {
+  const [value, setValue] = useState(0);
+  const from = useRef(0);
   const raf = useRef(0);
-  const from = useRef(target);
-
   useEffect(() => {
+    if (!run) return;
     const start = performance.now();
     const startVal = from.current;
-    const duration = 650;
     const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
+      const p = Math.min((now - start) / 680, 1);
       const eased = 1 - Math.pow(1 - p, 3);
       setValue(Math.round(startVal + (target - startVal) * eased));
       if (p < 1) raf.current = requestAnimationFrame(tick);
@@ -22,74 +26,59 @@ function useOdometer(target: number) {
     };
     raf.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf.current);
-  }, [target]);
-
-  return value;
+  }, [target, run]);
+  return run ? value : 0;
 }
 
-const AFTER_HOURS_SHARE = 0.42;
-const RESPONSE_LIFT = 0.35;
-
 export function RevenueCalculator() {
-  const [visitors, setVisitors] = useState(2200);
-  const [ticket, setTicket] = useState(850);
+  const [visitors, setVisitors] = useState(2400);
+  const [ticket, setTicket] = useState(880);
+  const [inView, setInView] = useState(false);
 
-  const lost = useMemo(() => {
-    const inquiries = visitors * 0.06;
-    const afterHours = inquiries * AFTER_HOURS_SHARE;
-    return Math.round(afterHours * RESPONSE_LIFT * ticket);
-  }, [visitors, ticket]);
+  const scope = useGsap(({ gsap, scope: root }) => {
+    gsap.from(root.querySelectorAll("[data-calc-in]"), {
+      opacity: 0,
+      y: 28,
+      duration: 0.7,
+      stagger: 0.08,
+      ease: "power3.out",
+      scrollTrigger: { trigger: root, start: "top 72%", onEnter: () => setInView(true) },
+    });
+  });
 
-  const display = useOdometer(lost);
+  const lost = useMemo(
+    () => Math.round(visitors * INQUIRY_RATE * AFTER_HOURS_SHARE * RESPONSE_LIFT * ticket),
+    [visitors, ticket],
+  );
+  const display = useCountUp(lost, inView);
 
   return (
-    <section id="calculator" className="py-24">
+    <section id="math" ref={scope} className="section">
       <div className="container">
-        <div className="grid gap-12 rounded-card border border-stroke bg-pearl/70 p-8 shadow-glass backdrop-blur-glass lg:grid-cols-[1.1fr_1fr] lg:p-12">
-          <div>
-            <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-slate">
-              Revenue leakage calculator
-            </p>
-            <h2 className="mt-4 font-display text-4xl leading-tight text-espresso">
-              What after-hours silence costs you every month.
-            </h2>
+        <h2 data-calc-in className="text-display-2 text-espresso">
+          What after-hours silence costs, per month.
+        </h2>
 
-            <div className="mt-9 space-y-7">
-              <Slider
-                label="Monthly website visitors"
-                value={visitors}
-                min={300}
-                max={12000}
-                step={100}
-                onChange={setVisitors}
-                format={(v) => v.toLocaleString()}
-              />
-              <Slider
-                label="Average treatment price"
-                value={ticket}
-                min={200}
-                max={3000}
-                step={50}
-                onChange={setTicket}
-                format={(v) => `$${v.toLocaleString()}`}
-              />
+        <div data-calc-in className="mt-12 grid overflow-hidden rounded-card border border-stroke lg:grid-cols-[1.05fr_1fr]">
+          <div className="border-b border-hairline bg-pearl p-9 lg:border-b-0 lg:border-r lg:p-12">
+            <div className="space-y-9">
+              <Slider label="Monthly website visitors" value={visitors} min={300} max={12000} step={100} onChange={setVisitors} format={(v) => v.toLocaleString()} />
+              <Slider label="Average treatment price" value={ticket} min={200} max={3000} step={20} onChange={setTicket} format={(v) => `$${v.toLocaleString()}`} />
             </div>
           </div>
 
-          <div className="flex flex-col justify-center rounded-card bg-[#211c19] p-8 text-[#f3efea]">
-            <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-champagne/80">
-              Estimated lost after-hours revenue
-            </p>
-            <p className="mt-3 font-display text-[3.4rem] leading-none tabular-nums text-champagne">
+          <div className="flex flex-col justify-center bg-ink p-9 lg:p-12">
+            <p className="text-sm text-champagne">Estimated lost after-hours revenue</p>
+            <p className="mt-4 font-display text-[3.6rem] font-semibold leading-none tabular-nums text-espresso">
               ${display.toLocaleString()}
-              <span className="ml-1 align-top font-sans text-base text-[#c9c1b7]">/mo</span>
+              <span className="ml-1.5 align-top font-sans text-base font-normal text-faint">/mo</span>
             </p>
-            <p className="mt-4 text-sm text-[#c9c1b7]">
-              Based on ~6% inquiry rate, {Math.round(AFTER_HOURS_SHARE * 100)}% arriving after
-              hours, and a {Math.round(RESPONSE_LIFT * 100)}% recovery lift from instant response.
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate">
+              Assumes a {(INQUIRY_RATE * 100).toFixed(1)}% inquiry rate, {Math.round(AFTER_HOURS_SHARE * 100)}% of
+              it arriving after hours, and a {Math.round(RESPONSE_LIFT * 100)}% recovery lift from instant response.
             </p>
-            <Button asChild variant="champagne" size="lg" className="mt-7 w-full">
-              <Link href="/register">Stop the leakage with Vespera</Link>
+            <Button asChild variant="primary" size="lg" className="mt-8 w-full">
+              <Link href="/register">Stop the leak</Link>
             </Button>
           </div>
         </div>
@@ -119,7 +108,7 @@ function Slider({
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <label className="text-xs font-medium uppercase tracking-[0.14em] text-slate">{label}</label>
+        <span className="text-sm text-slate">{label}</span>
         <span className="font-mono text-sm text-espresso">{format(value)}</span>
       </div>
       <input
@@ -130,14 +119,14 @@ function Slider({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={label}
-        className="mt-3 h-1.5 w-full cursor-pointer appearance-none rounded-pill outline-none
+        className="mt-3 h-1.5 w-full cursor-pointer appearance-none rounded-full outline-none
           [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none
-          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-champagne/40
-          [&::-webkit-slider-thumb]:bg-champagne [&::-webkit-slider-thumb]:shadow-champagne-glow
+          [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-champagne
+          [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(233,178,76,0.18)]
           [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full
           [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-champagne"
         style={{
-          background: `linear-gradient(to right, var(--accent-primary) ${pct}%, var(--border-subtle) ${pct}%)`,
+          background: `linear-gradient(to right, var(--accent-primary) ${pct}%, var(--surface-2) ${pct}%)`,
         }}
       />
     </div>
