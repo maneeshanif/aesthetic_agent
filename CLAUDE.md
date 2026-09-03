@@ -151,6 +151,6 @@ The voice-agent / triage experience is the visual centerpiece.
 
 - [x] Docs reviewed (PHASES.md, phase_1.md, design.md, progress.md)
 - [x] Commit 1 — Foundation (monorepo, config, deps, env, scaffold; web+api test/lint/build green)
-- [ ] `docs/phase-1-architecture.md` finalized
-- [ ] Commit 2 — Backend + tests
+- [x] `docs/phase-1-architecture.md` finalized (5 tables, RLS, auth flow, API surface)
+- [x] Commit 2 — Backend + tests (68 pytest passing, ruff clean, ~90% coverage)
 - [ ] Commit 3 — Frontend + tests
