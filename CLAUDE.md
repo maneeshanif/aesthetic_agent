@@ -153,4 +153,4 @@ The voice-agent / triage experience is the visual centerpiece.
 - [x] Commit 1 — Foundation (monorepo, config, deps, env, scaffold; web+api test/lint/build green)
 - [x] `docs/phase-1-architecture.md` finalized (5 tables, RLS, auth flow, API surface)
 - [x] Commit 2 — Backend + tests (68 pytest passing, ruff clean, ~90% coverage)
-- [ ] Commit 3 — Frontend + tests
+- [x] Commit 3 — Frontend + tests (landing + auth + 6 dashboard pages; 28 vitest passing; typecheck/lint/build green)

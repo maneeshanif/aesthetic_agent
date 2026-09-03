@@ -30,15 +30,16 @@ export interface RequestOptions extends Omit<RequestInit, "body"> {
 
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, token, headers, ...rest } = options;
+  const isForm = typeof FormData !== "undefined" && body instanceof FormData;
 
   const res = await fetch(`${apiBaseUrl()}${path}`, {
     ...rest,
     headers: {
-      "Content-Type": "application/json",
+      ...(isForm ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: body === undefined ? undefined : isForm ? (body as FormData) : JSON.stringify(body),
   });
 
   if (res.status === 204) return undefined as T;
