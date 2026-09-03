@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Instagram, ShieldCheck } from "lucide-react";
+import { Scene } from "@/components/marketing/scene";
 import { cn } from "@/lib/utils";
 
 type Bubble =
@@ -71,7 +72,14 @@ export function DmDemo() {
   const visibleTraces = TRACES.filter((tr) => t >= tr.at);
 
   return (
-    <section className="section border-t border-hairline">
+    <section className="relative overflow-hidden border-t border-hairline section">
+      <Scene
+        src="/media/dm-night"
+        poster="/media/dm-hands.webp"
+        className="-z-10 opacity-40 [mask-image:radial-gradient(120%_80%_at_50%_0%,black,transparent_75%)]"
+        objectPosition="50% 35%"
+        dim={0.78}
+      />
       <div className="container">
         <div className="max-w-2xl">
           <h2 className="text-display-2 text-espresso">

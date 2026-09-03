@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShieldCheck, CalendarClock, Database } from "lucide-react";
+import { Scene } from "@/components/marketing/scene";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
@@ -9,16 +10,19 @@ const ITEMS = [
     icon: ShieldCheck,
     title: "Medical guardrails",
     body: "Checks Accutane, active tans, recent filler, and pregnancy against the protocol rulebook you uploaded — retrieved and enforced before it books a laser. Not the open internet. Your rules.",
+    still: "/media/cap-2-safety.webp",
   },
   {
     icon: CalendarClock,
     title: "Direct booking",
     body: "Hands out the Boulevard, Zenoti, or NexHealth link you already use, the moment a lead is cleared. Nothing new for your front desk to learn, no scheduler to migrate.",
+    still: "/media/cap-3-booking.webp",
   },
   {
     icon: Database,
     title: "Built-in CRM",
     body: "Every lead who talks to the bot lands in a data grid with their requested treatment, flag status, estimated value, and the full reasoning trace, ready for follow-up.",
+    still: "/media/cap-1-menu.webp",
   },
 ];
 
@@ -47,6 +51,15 @@ export function Capabilities() {
                   active ? "bg-pearl lg:flex-[3]" : "bg-canvas lg:flex-[1]",
                 )}
               >
+                <Scene
+                  poster={item.still}
+                  className={cn(
+                    "transition-opacity duration-500 [mask-image:linear-gradient(180deg,transparent,black)]",
+                    active ? "opacity-25" : "opacity-0",
+                  )}
+                  objectPosition="center"
+                  dim={0.86}
+                />
                 <span
                   aria-hidden
                   className={cn(
@@ -54,7 +67,7 @@ export function Capabilities() {
                     active ? "bg-champagne" : "bg-transparent",
                   )}
                 />
-                <div className="flex items-center gap-3">
+                <div className="relative flex items-center gap-3">
                   <span
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
@@ -74,7 +87,7 @@ export function Capabilities() {
                 </div>
                 <p
                   className={cn(
-                    "mt-6 max-w-md text-[0.95rem] leading-relaxed text-slate transition-opacity duration-500 lg:mt-0",
+                    "relative mt-6 max-w-md text-[0.95rem] leading-relaxed text-slate transition-opacity duration-500 lg:mt-0",
                     active ? "opacity-100" : "opacity-100 lg:opacity-0",
                   )}
                 >

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Scene } from "@/components/marketing/scene";
 import { useGsap } from "@/lib/use-gsap";
 
 const INQUIRY_RATE = 0.058;
@@ -67,7 +68,15 @@ export function RevenueCalculator() {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center bg-ink p-9 lg:p-12">
+          <div className="relative flex flex-col justify-center overflow-hidden bg-ink p-9 lg:p-12">
+            <Scene
+              src="/media/revenue-vessel"
+              poster="/media/revenue-rising.webp"
+              className="opacity-40 [mask-image:linear-gradient(0deg,black,transparent_85%)]"
+              objectPosition="center"
+              dim={0.7}
+            />
+            <div className="relative">
             <p className="text-sm text-champagne">Estimated lost after-hours revenue</p>
             <p className="mt-4 font-display text-[3.6rem] font-semibold leading-none tabular-nums text-espresso">
               ${display.toLocaleString()}
@@ -80,6 +89,7 @@ export function RevenueCalculator() {
             <Button asChild variant="primary" size="lg" className="mt-8 w-full">
               <Link href="/register">Stop the leak</Link>
             </Button>
+            </div>
           </div>
         </div>
       </div>

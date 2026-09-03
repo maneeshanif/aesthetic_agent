@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, MessageSquareText, PhoneCall, PhoneIncoming } from "lucide-react";
 import { Waveform } from "@/components/marketing/waveform";
+import { Scene } from "@/components/marketing/scene";
 import { cn } from "@/lib/utils";
 
 type Mode = "outbound" | "inbound";
@@ -176,8 +177,18 @@ export function CallDemo() {
           </ul>
         </div>
 
-        {/* Call console */}
-        <div ref={ref} className="panel-lit p-6 sm:p-8">
+        {/* Call console — generated footage bleeds behind the glass. */}
+        <div className="relative">
+          <div className="pointer-events-none absolute -inset-6 overflow-hidden rounded-[1.7rem] opacity-70 sm:-inset-10">
+            <Scene
+              key={mode}
+              src={mode === "outbound" ? "/media/voice-outbound" : "/media/voice-inbound"}
+              poster="/media/voice-waveform.webp"
+              objectPosition="center"
+              dim={0.52}
+            />
+          </div>
+          <div ref={ref} className="panel-lit relative p-6 sm:p-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-grad text-[var(--text-on-accent)]">
@@ -268,6 +279,7 @@ export function CallDemo() {
               <MessageSquareText className="h-3.5 w-3.5 text-coral" strokeWidth={1.75} />
               {scene.outcome.sideNote}
             </div>
+          </div>
           </div>
         </div>
       </div>

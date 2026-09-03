@@ -2,13 +2,21 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
+import { Scene } from "@/components/marketing/scene";
 
 const CITIES = ["Beverly Hills", "Miami", "London", "Dubai", "Paris", "New York", "Singapore", "Toronto"];
 
 export function ClosingCta() {
   return (
-    <section className="wash-amber section">
-      <div className="container">
+    <section className="wash-amber section relative overflow-hidden">
+      <Scene
+        src="/media/cta-storefront"
+        poster="/media/cta-exterior.webp"
+        className="-z-10 opacity-50 [mask-image:radial-gradient(130%_100%_at_50%_50%,black,transparent_80%)]"
+        objectPosition="50% 60%"
+        dim={0.74}
+      />
+      <div className="container relative">
         <div className="border-y border-hairline py-16">
           <h2 className="max-w-3xl text-display-1 font-semibold text-espresso">
             Stop losing the bookings that go to{" "}

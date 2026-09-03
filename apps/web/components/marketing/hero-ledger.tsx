@@ -6,6 +6,7 @@ import { ArrowUpRight, Check, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { Waveform } from "@/components/marketing/waveform";
+import { Scene } from "@/components/marketing/scene";
 import { useGsap } from "@/lib/use-gsap";
 import { cn } from "@/lib/utils";
 
@@ -63,9 +64,17 @@ export function HeroLedger() {
 
   return (
     <section ref={scope} className="relative w-full overflow-hidden">
+      <Scene
+        src="/media/hero-reception"
+        poster="/media/hero-desk.webp"
+        className="-z-20 opacity-[0.55]"
+        objectPosition="70% 40%"
+        dim={0.72}
+        priority
+      />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-canvas/0 via-canvas/0 to-canvas"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-canvas/60 via-canvas/30 to-canvas"
       />
       <span
         aria-hidden

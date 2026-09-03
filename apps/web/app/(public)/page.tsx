@@ -6,6 +6,7 @@ import { HeroLedger } from "@/components/marketing/hero-ledger";
 import { ProblemStats } from "@/components/marketing/problem-stats";
 import { Proof } from "@/components/marketing/proof";
 import { RevenueCalculator } from "@/components/marketing/revenue-calculator";
+import { Roadmap } from "@/components/marketing/roadmap";
 import { TriageCanvas } from "@/components/marketing/triage-canvas";
 
 export default function LandingPage() {
@@ -19,6 +20,7 @@ export default function LandingPage() {
       <Capabilities />
       <RevenueCalculator />
       <Proof />
+      <Roadmap />
       <ClosingCta />
     </>
   );

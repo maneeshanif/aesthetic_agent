@@ -30,6 +30,9 @@ build/
 .env.*.local
 !.env.example
 
+# Raw / uncompressed media (source exports; compressed copies live in apps/web/public/media)
+.media-raw/
+
 # Editor / OS
 .DS_Store
 Thumbs.db
