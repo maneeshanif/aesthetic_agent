@@ -1,0 +1,21 @@
+{
+  "name": "vespera-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vespera AI — med-spa lead triage, clinical-protocol RAG, and voice telephony (Phase 1)",
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "test": "pnpm --filter web test",
+    "lint": "pnpm --filter web lint",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}

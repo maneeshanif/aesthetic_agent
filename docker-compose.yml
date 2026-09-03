@@ -1,0 +1,40 @@
+# Local dev infrastructure for Vespera AI (Phase 1).
+# Supabase Postgres/Auth is hosted; this file runs the vector DB and,
+# optionally, the API + web containers.
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.12.4
+    container_name: vespera-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./.qdrant:/qdrant/storage
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: vespera-api
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - qdrant
+    profiles: ["full"]
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: vespera-web
+    env_file:
+      - ./apps/web/.env.local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    profiles: ["full"]

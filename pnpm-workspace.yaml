@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+
+# pnpm >= 10 blocks lifecycle scripts unless explicitly allowed.
+# esbuild fetches its platform binary; unrs-resolver builds a native addon.
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver

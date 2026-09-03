@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Vespera AI design tokens — "Alabaster & Champagne Silk".
+ * Source of truth: design.md. Do not introduce colors outside this scale.
+ */
+@layer base {
+  :root {
+    --surface-0: #faf8f5; /* Warm Alabaster / Milk Silk (canvas) */
+    --surface-1: #ffffff; /* Pure Pearl (cards / glass) */
+    --surface-2: #f3efea; /* Tuscan Linen / Soft Bone (elevated) */
+    --border-subtle: #e8e2d9; /* Cashmere border stroke */
+    --accent-primary: #d4a373; /* Burnished Champagne Gold */
+    --accent-secondary: #e8c5b0; /* Silk Rose / Soft Blush */
+    --text-primary: #1a1715; /* Deep Espresso Basalt */
+    --text-muted: #7a7269; /* Warm Slate Grey */
+    --state-success: #5e826d; /* Eucalyptus Sage Green */
+    --state-flagged: #a65b5b; /* Subdued Terracotta Rose */
+
+    --font-display: "Instrument Serif";
+    --font-sans: "Plus Jakarta Sans";
+    --font-mono: "JetBrains Mono";
+
+    --radius: 20px;
+  }
+
+  * {
+    border-color: var(--border-subtle);
+  }
+
+  body {
+    background-color: var(--surface-0);
+    color: var(--text-primary);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 40px -12px rgba(26, 23, 21, 0.18);
+  }
+
+  .pill-button {
+    border-radius: 9999px;
+    border: 1px solid rgba(212, 163, 115, 0.3);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

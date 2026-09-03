@@ -1,0 +1,2 @@
+# (dashboard) route group — overview, patients, chat-tester, settings, knowledge, team.
+# Populated in Commit 3. Every route verifies role via spa_members before render.

@@ -1,0 +1,30 @@
+# Vespera AI — API runtime dependencies (Phase 1)
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+python-multipart==0.0.20
+
+# Auth / JWT
+pyjwt==2.10.1
+cryptography==44.0.0
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+supabase==2.11.0
+
+# Vector DB
+qdrant-client==1.12.2
+
+# AI (single-worker triage agent)
+google-genai==0.4.0
+
+# Document parsing for RAG ingestion
+pypdf==5.1.0
+langchain-text-splitters==0.3.4
+
+# Utilities
+httpx==0.28.1
+tenacity==9.0.0
+structlog==24.4.0
