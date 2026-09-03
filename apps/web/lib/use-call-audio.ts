@@ -5,11 +5,34 @@ import { useEffect, useRef, useState } from "react";
 export type CallPhase = "idle" | "dialing" | "live" | "ended";
 
 /**
+ * The browser blocks un-gestured sound, so we watch for the visitor's first
+ * real interaction anywhere on the page (pointer, key, touch) and "arm" audio
+ * once. Shared module-level state so every console reacts to that one gesture.
+ * (Wheel/scroll is deliberately excluded — it doesn't grant audio permission.)
+ */
+let armed = false;
+const armListeners = new Set<() => void>();
+let installed = false;
+
+function installArmOnce() {
+  if (installed || typeof window === "undefined") return;
+  installed = true;
+  const arm = () => {
+    if (armed) return;
+    armed = true;
+    armListeners.forEach((fn) => fn());
+    remove();
+  };
+  const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
+  const remove = () => events.forEach((e) => window.removeEventListener(e, arm));
+  events.forEach((e) => window.addEventListener(e, arm, { once: false, passive: true }));
+}
+
+/**
  * Synthetic call audio for the demo consoles: a ringback while dialing, a
- * low telephone-line room tone once connected. Starts muted (browsers block
- * un-gestured sound); the returned `toggle` is wired to a visible control, so
- * the first unmute is a user gesture and playback is allowed. A spoken
- * voiceover track can be layered in here later without touching callers.
+ * low telephone-line room tone once connected. Muted until the visitor's
+ * first interaction, then it comes on by itself; the returned `toggle` still
+ * lets them silence it. A spoken voiceover track can layer in here later.
  */
 export function useCallAudio(phase: CallPhase) {
   const [muted, setMuted] = useState(true);
@@ -32,6 +55,20 @@ export function useCallAudio(phase: CallPhase) {
       bed.pause();
       ringRef.current = null;
       bedRef.current = null;
+    };
+  }, []);
+
+  // Arm on the first page interaction, then un-mute this console once.
+  useEffect(() => {
+    if (armed) {
+      setMuted(false);
+      return;
+    }
+    installArmOnce();
+    const onArm = () => setMuted(false);
+    armListeners.add(onArm);
+    return () => {
+      armListeners.delete(onArm);
     };
   }, []);
 
