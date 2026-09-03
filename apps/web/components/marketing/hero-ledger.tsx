@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { Waveform } from "@/components/marketing/waveform";
 import { Scene } from "@/components/marketing/scene";
+import { MuteToggle } from "@/components/marketing/mute-toggle";
 import { useGsap } from "@/lib/use-gsap";
+import { useCallAudio } from "@/lib/use-call-audio";
 import { cn } from "@/lib/utils";
 
 const CAPTIONS = [
@@ -18,14 +20,16 @@ const CAPTIONS = [
 const LOOP = 10500;
 
 export function HeroLedger() {
+  // Entrance only. Everything is visible in the markup by default and GSAP
+  // animates *from* a hidden state — so reduced-motion, no-JS, or a slow
+  // chunk load can never leave the hero (or its console) blank.
   const scope = useGsap(({ gsap }) => {
-    gsap.set("[data-line]", { yPercent: 118, skewY: 4, filter: "blur(10px)" });
     gsap
       .timeline({ defaults: { ease: "power4.out" } })
-      .to("[data-line]", { yPercent: 0, skewY: 0, filter: "blur(0px)", duration: 1.15, stagger: 0.11 }, 0.15)
-      .to("[data-sub]", { opacity: 1, y: 0, duration: 0.8 }, "-=0.75")
-      .to("[data-cta]", { opacity: 1, y: 0, duration: 0.7 }, "-=0.6")
-      .fromTo("[data-console]", { opacity: 0, y: 44, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.95");
+      .from("[data-line]", { yPercent: 118, skewY: 4, filter: "blur(10px)", duration: 1.15, stagger: 0.11 }, 0.15)
+      .from("[data-sub]", { opacity: 0, y: 12, duration: 0.8 }, "-=0.75")
+      .from("[data-cta]", { opacity: 0, y: 12, duration: 0.7 }, "-=0.6")
+      .from("[data-console]", { opacity: 0, y: 44, filter: "blur(8px)", duration: 1 }, "-=0.95");
   });
 
   const consoleRef = useRef<HTMLDivElement>(null);
@@ -62,19 +66,23 @@ export function HeroLedger() {
   const secs = Math.max(0, Math.floor((Math.min(t, 8200) - 400) / 1000));
   const caption = [...CAPTIONS].reverse().find((c) => t >= c.at)?.text ?? CAPTIONS[0].text;
 
+  const { muted, toggle } = useCallAudio(
+    !running ? "idle" : ended ? "ended" : live ? "live" : "dialing",
+  );
+
   return (
     <section ref={scope} className="relative w-full overflow-hidden">
       <Scene
         src="/media/hero-reception"
         poster="/media/hero-desk.webp"
-        className="-z-20 opacity-[0.55]"
-        objectPosition="70% 40%"
-        dim={0.72}
+        className="-z-20 opacity-[0.32] [mask-image:linear-gradient(90deg,black,black_28%,transparent_64%)]"
+        objectPosition="72% 42%"
+        dim={0.86}
         priority
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-canvas/60 via-canvas/30 to-canvas"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_78%_50%,rgba(11,10,13,0.75),transparent),linear-gradient(to_bottom,rgba(11,10,13,0.7),rgba(11,10,13,0.35)_40%,var(--surface-0))]"
       />
       <span
         aria-hidden
@@ -104,13 +112,13 @@ export function HeroLedger() {
             </span>
           </h1>
 
-          <p data-sub className="mt-9 max-w-lg translate-y-3 text-lg leading-relaxed text-slate opacity-0">
+          <p data-sub className="mt-9 max-w-lg text-lg leading-relaxed text-slate">
             Vespera answers the 11&nbsp;PM DM in seconds, picks up the clinic line after hours, and
             calls stalled leads back the same evening — checking your clinical rulebook before it ever
             says <span className="text-espresso">yes</span>.
           </p>
 
-          <div data-cta className="mt-10 flex translate-y-3 flex-wrap items-center gap-3 opacity-0">
+          <div data-cta className="mt-10 flex flex-wrap items-center gap-3">
             <Magnetic strength={0.4}>
               <Button asChild size="lg" variant="primary">
                 <Link href="/register">
@@ -127,7 +135,26 @@ export function HeroLedger() {
 
         {/* Live voice console */}
         <div className="lg:col-span-6">
-          <div ref={consoleRef} data-console className="panel-lit p-5 opacity-0 sm:p-6">
+          <div ref={consoleRef} data-console className="panel-lit p-5 sm:p-6">
+            {/* The person on the other end of the line. */}
+            <div className="relative -mx-5 -mt-5 mb-4 h-24 overflow-hidden rounded-t-[13px] sm:-mx-6 sm:-mt-6 sm:h-28">
+              <Scene
+                src="/media/voice-outbound"
+                poster="/media/voice-waveform.webp"
+                objectPosition="50% 30%"
+                dim={0.28}
+                grade={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-pearl via-pearl/25 to-transparent" />
+              <div className="absolute inset-x-4 bottom-2 flex items-center justify-between">
+                <span className="flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-wide text-strong">
+                  <span className="h-1.5 w-1.5 rounded-full bg-coral motion-safe:animate-pulse" />
+                  Delphine · mobile
+                </span>
+                <MuteToggle muted={muted} onToggle={toggle} />
+              </div>
+            </div>
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-grad text-[var(--text-on-accent)]">
