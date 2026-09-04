@@ -45,10 +45,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <div className="container py-16">
           <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-sm">
-              <VesperaWordmark />
+              <VesperaWordmark tagline />
               <p className="mt-4 text-sm leading-relaxed text-slate">
-                The after-hours clinical concierge for aesthetic medicine. Beverly Hills, Miami,
-                London, Dubai.
+                The after-hours concierge for medical spas and aesthetic clinics — lead triage,
+                clinical-protocol checks, and booking. Beverly Hills, Miami, London, Dubai.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-x-14 gap-y-2.5 text-sm text-slate">

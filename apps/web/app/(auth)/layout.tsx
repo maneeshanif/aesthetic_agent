@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           className="pointer-events-none absolute -left-32 top-0 h-[34rem] w-[34rem] rounded-full bg-champagne/[0.12] blur-[120px] motion-safe:animate-gold-drift"
         />
         <Link href="/" className="relative">
-          <VesperaWordmark />
+          <VesperaWordmark tagline />
         </Link>
         <blockquote className="relative">
           <p className="font-display text-[2rem] font-medium leading-snug text-espresso">
@@ -18,13 +18,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </p>
           <footer className="mt-4 text-sm text-champagne">Dr. Marchetti Aesthetics — Miami</footer>
         </blockquote>
-        <p className="relative text-xs text-faint">After-hours clinical concierge</p>
+        <p className="relative text-xs text-faint">
+          Lead triage &amp; booking for medical spas and aesthetic clinics
+        </p>
       </aside>
 
       <div className="flex items-center justify-center px-6 py-14">
         <div className="w-full max-w-md">
           <div className="mb-10 lg:hidden">
-            <VesperaWordmark />
+            <VesperaWordmark tagline />
           </div>
           {children}
         </div>

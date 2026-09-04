@@ -45,12 +45,26 @@ export function VesperaMark({ className }: { className?: string }) {
   );
 }
 
-export function VesperaWordmark({ className }: { className?: string }) {
+export function VesperaWordmark({
+  className,
+  tagline = false,
+}: {
+  className?: string;
+  /** Show the "for medical spas" positioning line under the wordmark. */
+  tagline?: boolean;
+}) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <VesperaMark />
-      <span className="font-display text-[1.35rem] font-semibold leading-none tracking-editorial text-espresso">
-        Vespera
+      <span className="flex flex-col">
+        <span className="font-display text-[1.35rem] font-semibold leading-none tracking-editorial text-espresso">
+          Vespera
+        </span>
+        {tagline && (
+          <span className="mt-1 text-[0.7rem] font-medium uppercase tracking-[0.14em] text-champagne">
+            After-hours concierge for med spas
+          </span>
+        )}
       </span>
     </span>
   );

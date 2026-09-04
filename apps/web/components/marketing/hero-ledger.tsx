@@ -91,6 +91,10 @@ export function HeroLedger() {
 
       <div className="container grid grid-cols-1 items-center gap-y-16 pb-28 pt-40 lg:grid-cols-12 lg:gap-x-10 lg:pb-40 lg:pt-48">
         <div className="lg:col-span-6">
+          <p className="mb-6 inline-flex items-center gap-2 rounded-pill border border-stroke bg-pearl/60 px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.14em] text-champagne backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-champagne" />
+            For medical spas &amp; aesthetic clinics
+          </p>
           <h1
             className="font-semibold text-espresso"
             style={{ fontSize: "clamp(2.7rem, 5.7vw, 5.05rem)", lineHeight: 1, letterSpacing: "-0.04em" }}
