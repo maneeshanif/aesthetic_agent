@@ -1,29 +1,70 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-/** Vespera mark — the evening star over the horizon line. */
+/** Vespera mark — the animated evening-star seal, with a still fallback. */
 export function VesperaMark({ className }: { className?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [motion, setMotion] = useState(false);
+
+  useEffect(() => {
+    setMotion(!window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
+
+  useEffect(() => {
+    if (motion) videoRef.current?.play().catch(() => {});
+  }, [motion]);
+
   return (
-    <svg
-      viewBox="0 0 28 28"
-      fill="none"
-      className={cn("h-6 w-6 text-champagne", className)}
+    <span
+      className={cn(
+        "relative block h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-stroke",
+        className,
+      )}
       aria-hidden="true"
     >
-      <path
-        d="M14 3.5l1.9 5.3a5 5 0 003.3 3.3l5.3 1.9-5.3 1.9a5 5 0 00-3.3 3.3L14 24.5l-1.9-5.3a5 5 0 00-3.3-3.3L3.5 14l5.3-1.9a5 5 0 003.3-3.3L14 3.5z"
-        fill="currentColor"
-        fillOpacity="0.9"
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/media/logo-star.webp"
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
       />
-    </svg>
+      {motion && (
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/media/logo-star.mp4"
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+      )}
+    </span>
   );
 }
 
-export function VesperaWordmark({ className }: { className?: string }) {
+export function VesperaWordmark({
+  className,
+  tagline = false,
+}: {
+  className?: string;
+  /** Show the "for medical spas" positioning line under the wordmark. */
+  tagline?: boolean;
+}) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <VesperaMark />
-      <span className="font-display text-[1.35rem] font-semibold leading-none tracking-editorial text-espresso">
-        Vespera
+      <span className="flex flex-col">
+        <span className="font-display text-[1.35rem] font-semibold leading-none tracking-editorial text-espresso">
+          Vespera
+        </span>
+        {tagline && (
+          <span className="mt-1 text-[0.7rem] font-medium uppercase tracking-[0.14em] text-champagne">
+            After-hours concierge for med spas
+          </span>
+        )}
       </span>
     </span>
   );

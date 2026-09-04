@@ -79,8 +79,13 @@ export function DashboardShell({
         <div className="flex h-16 items-center gap-2.5 border-b border-hairline px-5">
           <VesperaMark />
           {!collapsed && (
-            <span className="font-display text-lg font-semibold tracking-editorial text-espresso">
-              Vespera
+            <span className="flex flex-col">
+              <span className="font-display text-lg font-semibold leading-none tracking-editorial text-espresso">
+                Vespera
+              </span>
+              <span className="mt-0.5 text-[0.62rem] font-medium uppercase tracking-[0.12em] text-faint">
+                Med-spa concierge
+              </span>
             </span>
           )}
         </div>
@@ -111,7 +116,7 @@ export function DashboardShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-hairline bg-canvas/80 px-6 backdrop-blur-glass">
           <div className="flex items-baseline gap-2.5">
-            <span className="text-sm text-faint">Studio</span>
+            <span className="text-sm text-faint">Med spa</span>
             <span className="text-faint">/</span>
             <h1 className="font-display text-lg font-semibold leading-none text-espresso">{title}</h1>
           </div>

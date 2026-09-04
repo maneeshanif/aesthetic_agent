@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, MessageSquareText, PhoneCall, PhoneIncoming } from "lucide-react";
 import { Waveform } from "@/components/marketing/waveform";
+import { Scene } from "@/components/marketing/scene";
+import { MuteToggle } from "@/components/marketing/mute-toggle";
+import { useCallAudio } from "@/lib/use-call-audio";
 import { cn } from "@/lib/utils";
 
 type Mode = "outbound" | "inbound";
@@ -121,6 +124,10 @@ export function CallDemo() {
         ? "Dialing…"
         : "Ringing…";
 
+  const { muted, toggle } = useCallAudio(
+    !running ? "idle" : ended ? "ended" : live ? "live" : "dialing",
+  );
+
   function pick(m: Mode) {
     setLocked(true);
     setMode(m);
@@ -176,8 +183,31 @@ export function CallDemo() {
           </ul>
         </div>
 
-        {/* Call console */}
-        <div ref={ref} className="panel-lit p-6 sm:p-8">
+        {/* The caller, then the console. */}
+        <div ref={ref} className="space-y-4">
+          <figure className="relative h-40 overflow-hidden rounded-card border border-stroke sm:h-52">
+            <Scene
+              key={mode}
+              src={mode === "outbound" ? "/media/voice-outbound" : "/media/voice-inbound"}
+              poster="/media/voice-waveform.webp"
+              objectPosition="50% 28%"
+              dim={0.4}
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between bg-gradient-to-t from-ink/90 to-transparent p-3.5">
+              <span className="flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-wide text-strong">
+                <span
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full motion-safe:animate-pulse",
+                    live ? "bg-sage" : ended ? "bg-faint" : "bg-coral",
+                  )}
+                />
+                {mode === "outbound" ? "Delphine Aumont · mobile" : "Inbound · +1 (305) 555-0148"}
+              </span>
+              <MuteToggle muted={muted} onToggle={toggle} />
+            </figcaption>
+          </figure>
+
+          <div className="panel-lit p-6 sm:p-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-grad text-[var(--text-on-accent)]">
@@ -268,6 +298,7 @@ export function CallDemo() {
               <MessageSquareText className="h-3.5 w-3.5 text-coral" strokeWidth={1.75} />
               {scene.outcome.sideNote}
             </div>
+          </div>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Instagram, ShieldCheck } from "lucide-react";
+import { Scene } from "@/components/marketing/scene";
 import { cn } from "@/lib/utils";
 
 type Bubble =
@@ -71,7 +72,19 @@ export function DmDemo() {
   const visibleTraces = TRACES.filter((tr) => t >= tr.at);
 
   return (
-    <section className="section border-t border-hairline">
+    <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden border-t border-hairline py-24">
+      <Scene
+        src="/media/dm-night"
+        poster="/media/dm-hands.webp"
+        className="-z-10"
+        objectPosition="50% 40%"
+        dim={0.45}
+      />
+      {/* Legibility scrim — footage stays full-bleed, text stays readable. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-[5] bg-[linear-gradient(to_right,var(--surface-0)_0%,rgba(11,10,13,0.78)_42%,rgba(11,10,13,0.32)_100%),linear-gradient(to_bottom,rgba(11,10,13,0.55),transparent_28%,rgba(11,10,13,0.8))]"
+      />
       <div className="container">
         <div className="max-w-2xl">
           <h2 className="text-display-2 text-espresso">

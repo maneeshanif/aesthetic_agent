@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { MessageSquareText, ScanLine, CalendarCheck2 } from "lucide-react";
+import { Scene } from "@/components/marketing/scene";
 import { useGsap } from "@/lib/use-gsap";
 
 const PANELS = [
@@ -23,6 +24,12 @@ const PANELS = [
     body: "Once the lead is medically cleared, Vespera hands out your Boulevard or Zenoti link and files the lead in the CRM with the full reasoning trace attached.",
     trace: ["status  medically_cleared", "issue   booking_url → boulevard", "crm.upsert(lead)  ok  142ms"],
   },
+];
+
+const PANEL_STILLS = [
+  "/media/triage-1-glass.webp",
+  "/media/triage-2-aperture.webp",
+  "/media/triage-3-approved.webp",
 ];
 
 export function TriageCanvas() {
@@ -65,7 +72,15 @@ export function TriageCanvas() {
       ref={scope}
       className="relative border-y border-hairline bg-ink lg:min-h-[100dvh] lg:overflow-hidden"
     >
-      <div className="container pt-16 lg:pt-20">
+      <Scene
+        src="/media/triage-threading"
+        poster="/media/triage-2-aperture.webp"
+        className="opacity-30 [mask-image:radial-gradient(120%_120%_at_50%_50%,black,transparent_80%)]"
+        objectPosition="center"
+        dim={0.8}
+        scrub
+      />
+      <div className="container relative pt-16 lg:pt-20">
         <h2 className="max-w-2xl text-display-2 text-espresso">
           Three moves between a midnight message and a booked chair.
         </h2>
@@ -79,9 +94,15 @@ export function TriageCanvas() {
           <article
             key={p.title}
             data-panel
-            className="flex shrink-0 flex-col justify-between rounded-card border border-stroke bg-pearl p-8 lg:w-[38rem]"
+            className="relative flex shrink-0 flex-col justify-between overflow-hidden rounded-card border border-stroke bg-pearl p-8 lg:w-[38rem]"
           >
-            <div>
+            <Scene
+              poster={PANEL_STILLS[i]}
+              className="opacity-25 [mask-image:linear-gradient(180deg,black,transparent)]"
+              objectPosition="center"
+              dim={0.85}
+            />
+            <div className="relative">
               <span
                 data-panel-in
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-champagne/12"
@@ -100,7 +121,7 @@ export function TriageCanvas() {
             </div>
             <pre
               data-panel-in
-              className="mt-8 overflow-x-auto rounded-md border border-hairline bg-ink px-4 py-3.5 font-mono text-[0.72rem] leading-relaxed text-slate"
+              className="relative mt-8 overflow-x-auto rounded-md border border-hairline bg-ink/90 px-4 py-3.5 font-mono text-[0.72rem] leading-relaxed text-slate backdrop-blur-sm"
             >
               {p.trace.join("\n")}
             </pre>

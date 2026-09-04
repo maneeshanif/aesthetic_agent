@@ -29,7 +29,7 @@ const accountSchema = z
 type AccountValues = z.infer<typeof accountSchema>;
 
 const spaSchema = z.object({
-  name: z.string().min(2, "Name your studio").max(120),
+  name: z.string().min(2, "Name your med spa").max(120),
   slug: z
     .string()
     .min(2)
@@ -48,7 +48,7 @@ const TIMEZONES = [
   "Asia/Dubai",
 ];
 
-const STEPS = ["Account", "Your studio", "Done"];
+const STEPS = ["Account", "Your med spa", "Done"];
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -140,7 +140,9 @@ export default function RegisterPage() {
       {step === 0 && (
         <>
           <h1 className="text-display-2 text-espresso">Create your account</h1>
-          <p className="mt-2 text-sm text-slate">Two minutes to your first triage.</p>
+          <p className="mt-2 text-sm text-slate">
+            Set up Vespera for your med spa — two minutes to your first triage.
+          </p>
           <form onSubmit={accountForm.handleSubmit(onAccount)} className="mt-8 space-y-5">
             <FormField label="Work email" htmlFor="email" error={accountForm.formState.errors.email?.message}>
               <Input id="email" type="email" autoComplete="email" {...accountForm.register("email")} />
@@ -184,10 +186,12 @@ export default function RegisterPage() {
 
       {step === 1 && (
         <>
-          <h1 className="text-display-2 text-espresso">Name your studio</h1>
-          <p className="mt-2 text-sm text-slate">This becomes your tenant workspace.</p>
+          <h1 className="text-display-2 text-espresso">Name your med spa</h1>
+          <p className="mt-2 text-sm text-slate">
+            This becomes your clinic&apos;s isolated workspace on Vespera.
+          </p>
           <form onSubmit={spaForm.handleSubmit(onSpa)} className="mt-8 space-y-5">
-            <FormField label="Studio name" htmlFor="name" error={spaForm.formState.errors.name?.message}>
+            <FormField label="Med spa name" htmlFor="name" error={spaForm.formState.errors.name?.message}>
               <Input id="name" placeholder="Sterling Aesthetics" {...spaForm.register("name")} />
             </FormField>
             <FormField

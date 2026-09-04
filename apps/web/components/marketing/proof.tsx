@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useCountUp } from "@/lib/use-count-up";
 import { useGsap } from "@/lib/use-gsap";
+import { Scene } from "@/components/marketing/scene";
 
 const RESULTS = [
   {
@@ -60,12 +61,25 @@ export function Proof() {
           ))}
         </div>
 
-        <p className="mt-12 max-w-3xl text-[1.05rem] leading-relaxed text-strong">
-          Patients are already asking after hours — front desks simply cannot cover evenings and
-          weekends consistently. Instant AI replies plus intelligent voice recovery turn inquiries
-          that used to go to voicemail or a competitor into booked consultations, usually paying for
-          the system with a single treatment.
-        </p>
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:items-stretch">
+          <p className="max-w-3xl self-center text-[1.05rem] leading-relaxed text-strong">
+            Patients are already asking after hours — front desks simply cannot cover evenings and
+            weekends consistently. Instant AI replies plus intelligent voice recovery turn inquiries
+            that used to go to voicemail or a competitor into booked consultations, usually paying for
+            the system with a single treatment.
+          </p>
+          <figure className="relative aspect-[4/5] overflow-hidden rounded-card border border-stroke sm:aspect-[3/2] lg:aspect-auto">
+            <Scene
+              src="/media/proof-owner"
+              poster="/media/proof-portrait.webp"
+              objectPosition="50% 30%"
+              dim={0.4}
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-ink/90 to-transparent p-5 text-sm text-strong">
+              Owner, single-location med spa · Texas
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </section>
   );

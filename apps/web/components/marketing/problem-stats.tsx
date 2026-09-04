@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { useCountUp } from "@/lib/use-count-up";
 import { useGsap } from "@/lib/use-gsap";
+import { Scene } from "@/components/marketing/scene";
 import { cn } from "@/lib/utils";
 
 const HEADLINE_STATS = [
@@ -81,10 +82,18 @@ export function ProblemStats() {
           almost every clinic is dark for all of them.
         </p>
 
-        <div className="mt-14 grid gap-10 border-y border-hairline py-12 sm:grid-cols-3">
-          {HEADLINE_STATS.map((s) => (
-            <Stat key={s.label} {...s} run={run} />
-          ))}
+        <div className="relative mt-14 overflow-hidden rounded-card border-y border-hairline">
+          <Scene
+            poster="/media/problem-empty.webp"
+            className="opacity-[0.28] [mask-image:linear-gradient(90deg,transparent,black_30%,black_70%,transparent)]"
+            objectPosition="50% 60%"
+            dim={0.82}
+          />
+          <div className="relative grid gap-10 py-12 sm:grid-cols-3">
+            {HEADLINE_STATS.map((s) => (
+              <Stat key={s.label} {...s} run={run} />
+            ))}
+          </div>
         </div>
 
         <div className="mt-16">

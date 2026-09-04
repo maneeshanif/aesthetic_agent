@@ -54,7 +54,7 @@ function LoginForm() {
   return (
     <div>
       <h1 className="text-display-2 text-espresso">Welcome back</h1>
-      <p className="mt-2 text-sm text-slate">Sign in to your Vespera workspace.</p>
+      <p className="mt-2 text-sm text-slate">Sign in to your med spa&apos;s Vespera workspace.</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
         <FormField label="Email" htmlFor="email" error={errors.email?.message}>

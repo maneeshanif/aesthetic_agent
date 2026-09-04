@@ -107,7 +107,7 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              <FormField label="Studio name" htmlFor="name" error={errors.name?.message}>
+              <FormField label="Med spa name" htmlFor="name" error={errors.name?.message}>
                 <Input id="name" {...register("name")} />
               </FormField>
 
