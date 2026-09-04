@@ -49,12 +49,10 @@ cp .env.example apps/api/.env
 # 3. Local infra (Qdrant)
 docker compose up -d
 
-# 4. Backend
+# 4. Backend  (needs uv — https://docs.astral.sh/uv/)
 cd apps/api
-python -m venv .venv
-# Windows:  .venv\Scripts\activate     |  macOS/Linux:  source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
-uvicorn app.main:app --reload
+uv sync                       # creates .venv, installs runtime + dev deps from uv.lock
+uv run uvicorn app.main:app --reload
 
 # 5. Frontend (new terminal)
 pnpm --filter web dev
@@ -65,8 +63,8 @@ Web runs on http://localhost:3000, API on http://localhost:8000 (docs at `/docs`
 ## Tests
 
 ```bash
-pnpm --filter web test        # Vitest + Testing Library
-cd apps/api && pytest         # pytest
+pnpm --filter web test          # Vitest + Testing Library
+cd apps/api && uv run pytest    # pytest
 ```
 
 ## Commit plan (Phase 1)

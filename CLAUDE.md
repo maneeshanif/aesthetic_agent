@@ -60,7 +60,7 @@
 - **Frontend:** `apps/web` — Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui, Zustand,
   React Hook Form + Zod, GSAP, Lucide + bespoke SVG icons.
 - **Backend:** `apps/api` — FastAPI (Python 3.11+), Pydantic v2, SQLAlchemy 2.0 (async) / Supabase client,
-  Qdrant client, Google Gemini (`google-genai`).
+  Qdrant client, Google Gemini (`google-genai`). Dependencies managed by **uv** (`pyproject.toml` + `uv.lock`).
 - **DB & Auth:** Supabase (Postgres + RLS + Auth). JWT carries `spa_id` + `role` via app metadata.
 - **Vector DB:** Qdrant (local via docker-compose in dev).
 - **Agent engine:** Gemini 2.0 Flash (single worker — Phase 1 only).
@@ -113,10 +113,11 @@ pnpm --filter web build
 pnpm --filter web test
 pnpm --filter web lint
 
-# Backend (apps/api)  — from apps/api with venv active
-uvicorn app.main:app --reload
-pytest
-ruff check .
+# Backend (apps/api)  — managed by uv
+uv sync                          # install deps from uv.lock (creates .venv)
+uv run uvicorn app.main:app --reload
+uv run pytest
+uv run ruff check .
 
 # Infra
 docker compose up -d        # Qdrant

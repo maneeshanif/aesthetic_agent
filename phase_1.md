@@ -31,7 +31,8 @@ GlowAgent/
 │   │   │   │   ├── ai_service.py            # Gemini 2.0 Flash prompt generation & execution
 │   │   │   │   └── vector_service.py        # Qdrant chunking, embedding, and retrieval
 │   │   │   └── main.py                      # FastAPI ASGI entrypoint & CORS config
-│   │   ├── requirements.txt
+│   │   ├── pyproject.toml
+│   │   ├── uv.lock
 │   │   └── Dockerfile
 │   │
 │   ├── 📁 web/                              # ⚛️ Next.js 14 App Router Frontend (Phase 1)
